@@ -5,6 +5,9 @@ if [ ! -d "X42-FullNode" ]; then
     cd X42-FullNode/src
     dotnet restore
     dotnet publish --configuration Release
+    if [ ! -d "~/x42node" ]; then
+        mkdir ~/x42node
+    fi
     mv -f ~/X42-FullNode/src/x42.x42D/bin/Release/netcoreapp2.1/publish ~/x42node/
     cd
     ssh USERNAME@xxx.xxx.xxx.xxx 'sudo systemctl stop x42node.service; rm -rf x42node'
@@ -16,6 +19,9 @@ elif [ -d "X42-FullNode" ]; then
     cd src
     dotnet restore
     dotnet publish --configuration Release
+    if [ ! -d "~/x42node" ]; then
+        mkdir ~/x42node
+    fi
     mv -f ~/X42-FullNode/src/x42.x42D/bin/Release/netcoreapp2.1/publish ~/x42node/
     cd
     ssh USERNAME@xxx.xxx.xxx.xxx 'sudo systemctl stop x42node.service; rm -rf x42node'
