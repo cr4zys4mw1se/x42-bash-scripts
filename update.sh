@@ -6,6 +6,9 @@ if [ ! -d "X42-FullNode" ]; then
     cd X42-FullNode/src
     dotnet restore
     dotnet build --configuration Release
+    if [ ! -d "~/x42node" ]; then
+        mkdir ~/x42node
+    fi
     mv -f ~/X42-FullNode/src/x42.x42D/bin/Release/netcoreapp2.1/*.* ~/x42node/
     sudo systemctl start x42node.service
     cd
@@ -16,6 +19,9 @@ elif [ -d "X42-FullNode" ]; then
     cd src
     dotnet restore
     dotnet build --configuration Release
+    if [ ! -d "~/x42node" ]; then
+        mkdir ~/x42node
+    fi
     mv -f ~/X42-FullNode/src/x42.x42D/bin/Release/netcoreapp2.1/*.* ~/x42node/
     sudo systemctl start x42node.service
     cd
