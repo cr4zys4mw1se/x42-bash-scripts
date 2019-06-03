@@ -5,7 +5,7 @@ A few quick and simple bash scripts that will allow you to do the following.
 1. Install the x42-FullNode from scratch.
 2. Update an existing FullNode on a regular device (pc, vps etc) or on an ARM based device.
 
-A valuable guide to reference is [DarthNoodle's Reddit Post](https://www.reddit.com/r/x42/comments/akp6lp/creating_a_headless_staking_node_on_ubuntu_1804/), which throughly provides steps on installing the FullNode from scratch.
+A valuable guide to reference is [DarthNoodle's Reddit Post](https://www.reddit.com/r/x42/comments/akp6lp/creating_a_headless_staking_node_on_ubuntu_1804/), which thoroughly provides steps on installing the FullNode from scratch.
 
 # Contents:
    * [Setup](#setup)
