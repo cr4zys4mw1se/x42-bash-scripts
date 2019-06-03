@@ -26,7 +26,7 @@ ___
   * Replace `xxx.xxx.xxx.xxx` with the correct internal _IP Address_
 
 ## Side-Notes:
-  * Both update scripts assume you use `x42node.service` as mentioned in DarthNoodle's guide via [Reddit](https://www.reddit.com/r/x42/comments/akp6lp/creating_a_headless_staking_node_on_ubuntu_1804/).
+  * Both update scripts assume you use `x42node.service` as mentioned in [DarthNoodle's guide via Reddit](https://www.reddit.com/r/x42/comments/akp6lp/creating_a_headless_staking_node_on_ubuntu_1804/).
       If you don't, be sure to edit the script accordingly.
   * `update-arm.sh` should be ran via a Debian/Ubuntu PC/Laptop that has dotnet 2.2.x and is on the same network as the ARM based device. (unless you've setup external network access)
 
