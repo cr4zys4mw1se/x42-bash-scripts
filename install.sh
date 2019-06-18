@@ -83,8 +83,7 @@ if [ -x "$(command -v apt -v)" ]; then
         cd ~/X42-FullNode/src
         dotnet restore
         dotnet build --configuration Release
-        mkdir ~/x42node
-        mv ~/X42-FullNode/src/x42.x42D/bin/Release/netcoreapp2.1/*.* ~/x42node/
+        mv x42.x42D/bin/Release/netcoreapp2.1 ~/x42node
     else
         printf "X42-FullNode found, checking for updates before building...\n\n"
         cd ~/X42-FullNode
@@ -94,10 +93,9 @@ if [ -x "$(command -v apt -v)" ]; then
         dotnet restore
         dotnet build --configuration Release
         if [ ! -d "/home/$USER/x42node" ]; then
-            mkdir ~/x42node
-            mv ~/X42-FullNode/src/x42.x42D/bin/Release/netcoreapp2.1/*.* ~/x42node/
+            mv x42.x42D/bin/Release/netcoreapp2.1 ~/x42node
         else
-            mv -f ~/X42-FullNode/src/x42.x42D/bin/Release/netcoreapp2.1/*.* ~/x42node/
+            mv -f x42.x42D/bin/Release/netcoreapp2.1 ~/x42node
         fi
     fi
     if [ ! -e "/etc/systemd/system/x42node.service" ]; then
