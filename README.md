@@ -1,12 +1,17 @@
 # x42 Bash Scripts
 
-A few quick and simple bash scripts that will allow you to do the following.
+A few bash scripts that will allow you to do the following.
 
 1. Install the [x42-FullNode](https://github.com/x42protocol/X42-FullNode) from scratch.
 2. Update an existing FullNode on a regular device (pc, vps etc) or on an ARM based device.
+___
 
-A valuable guide to reference is [DarthNoodle's Reddit Post](https://www.reddit.com/r/x42/comments/akp6lp/creating_a_headless_staking_node_on_ubuntu_1804/), which thoroughly provides steps on installing the FullNode from scratch.
+`install.sh` - Detects which Ubuntu release *`16.04 - 19.04`* is used. Installs .NET SDK based on Ubuntu release, if already installed, it continues to download the X42-FullNode repo. Builds the x42node and moves the needed files to a folder *`(/home/$USER/x42node | ~/x42node)`*. Finishes by creating a service file *`(x42node.service)`* that enables x42node to startup at boot.
 
+`update.sh` - Will verify if you have the X42-FullNode folder. It will either update or download accordingly. Stops the `x42node.service`. Runs the normal build process and starts the `x42node.service` when finished. *__Read the [Side-Notes](#side-notes)__ if you're __not__ using __`x42node.service`__.*
+
+`update-arm.sh`- Similar to `update.sh`, it will detect if the X42-FullNode folder is available or not and builds the x42node. Prompts for the ARM device __*username*__ and the __*ip*__. Then will ssh to the device, stops the `x42node.service` and removes the existing x42node folder. Transfers the new x42node folder and starts `x42node.service`.
+___
 # Contents:
    * [Setup](#setup)
    * [Edits Required](#edits-required)
@@ -15,20 +20,18 @@ ___
 
 ## Setup
   * Download the script(s)
-  * Move the script of choice to your Home folder. `(ex. /home/$USER)`
   * Make it executable - `chmod +x script.sh`
   * Run the script - `./script.sh`
-  * Enter password when prompted
+  * Enter password and/or requested information when prompted
 
 ## Edits Required:
-* General edits that _**need**_ to be made in `update-arm.sh`:
-  * Replace `USERNAME` with the username you would use to connect to the device. `(ex. ssh cr4zys4mw1se@255.255.255.255)`
-  * Replace `xxx.xxx.xxx.xxx` with the correct internal _IP Address_
+* None at this time
 
 ## Side-Notes:
-  * Both update scripts assume you use `x42node.service` as mentioned in [DarthNoodle's guide via Reddit](https://www.reddit.com/r/x42/comments/akp6lp/creating_a_headless_staking_node_on_ubuntu_1804/).
+  * Both `update` scripts assume you use a service named `x42node.service` and a folder named `x42node`.
       If you don't, be sure to edit the script accordingly.
   * `update-arm.sh` should be ran via a Debian/Ubuntu PC/Laptop that has dotnet 2.2.x and is on the same network as the ARM based device. (unless you've setup external network access)
+  * A valuable guide to reference is [DarthNoodle's Reddit Post](https://www.reddit.com/r/x42/comments/akp6lp/creating_a_headless_staking_node_on_ubuntu_1804/), which thoroughly provides steps on installing the FullNode from scratch.
 
 ---
 
