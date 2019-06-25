@@ -19,6 +19,7 @@ if [ ! -d "/home/$USER/X42-FullNode" ]; then
     dotnet restore
     dotnet build --configuration Release
     if [ ! -d "/home/$USER/x42node" ]; then
+        mkdir ~/x42node
         mv x42.x42D/bin/Release/netcoreapp2.1 ~/x42node
     else
         mv -f x42.x42D/bin/Release/netcoreapp2.1 ~/x42node
@@ -42,6 +43,7 @@ else
     dotnet restore
     dotnet build --configuration Release
     if [ ! -d "/home/$USER/x42node" ]; then
+        mkdir ~/x42node
         mv x42.x42D/bin/Release/netcoreapp2.1 ~/x42node
     else
         mv -f x42.x42D/bin/Release/netcoreapp2.1 ~/x42node
