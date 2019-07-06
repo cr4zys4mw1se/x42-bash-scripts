@@ -6,6 +6,20 @@ A few bash scripts that will allow you to do the following.
 2. Update an existing FullNode on a regular device (pc, vps etc) or on an ARM based device.
 ___
 
+`aio-installer.sh` - Menu allows you to select what you would like to do:
+   * Install X42-FullNode from scratch
+   * Update existing X42-FullNode
+   * Install to an ARM device
+   * Update an ARM device
+
+It will install .NET SDK if not installed and .NET runtime for the ARM device.
+Runs on:
+   * Ubuntu 16.04-19.04
+   * Debian 9
+   * CentOS
+   * Fedora 27 and 28
+___
+
 `install.sh` - Detects which Ubuntu release *`16.04 - 19.04`* is used. Installs .NET SDK based on Ubuntu release, if already installed, it continues to download the X42-FullNode repo. Builds the x42node and moves the needed files to a folder *`(/home/$USER/x42node | ~/x42node)`*. Finishes by creating a service file *`(x42node.service)`* that enables x42node to startup at boot.
 
 `update.sh` - Will verify if you have the X42-FullNode folder. It will either update or download accordingly. Stops the `x42node.service`. Runs the normal build process and starts the `x42node.service` when finished. *__Read the [Side-Notes](#side-notes)__ if you're __not__ using __`x42node.service`__.*
@@ -22,7 +36,7 @@ ___
   * Download the script(s)
   * Make it executable - `chmod +x script.sh`
   * Run the script - `./script.sh`
-  * Enter password and/or requested information when prompted
+  * Enter requested information when prompted
 
 ## Edits Required:
 * None at this time
