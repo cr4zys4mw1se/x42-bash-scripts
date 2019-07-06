@@ -698,6 +698,8 @@ EOF
                                                                     case $opt in
                                                                         "16.04")
                                                                             cat <<EOS > dotnet.sh
+#!/usr/bin/env bash
+
 printf "\nInstalling .NET Runtime now...\n\n"
 cd /tmp
 wget -q https://packages.microsoft.com/config/ubuntu/16.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
@@ -718,6 +720,8 @@ EOS
                                                                             ;;
                                                                         "18.04/18.10")
                                                                             cat <<EOS > dotnet.sh
+#!/usr/bin/env bash
+
 printf "\nInstalling .NET Runtime now...\n\n"
 cd /tmp
 wget -q https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
@@ -762,6 +766,8 @@ EOS
                                                                             ;;
                                                                         "19.04")
                                                                             cat <<EOS > dotnet.sh
+#!/usr/bin/env bash
+
 printf "\nInstalling .NET Runtime now...\n\n"
 cd /tmp
 wget -q https://packages.microsoft.com/config/ubuntu/19.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
@@ -807,11 +813,14 @@ EOS
                                                                     esac
                                                                 done
                                                             }
+                                                            clear
                                                             releases
                                                             break
                                                             ;;
                                                         "Debian")
                                                             cat <<EOS > dotnet.sh
+#!/usr/bin/env bash
+
 printf "\nInstalling .NET runtime now...\n\n"
 cd /tmp
 wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.asc.gpg
@@ -836,6 +845,8 @@ EOS
                                                             ;;
                                                         "CentOS")
                                                             cat <<EOS > dotnet.sh
+#!/usr/bin/env bash
+
 printf "\nInstalling .NET Runtime now...\n\n"
 sudo rpm -Uvh https://packages.microsoft.com/config/rhel/7/packages-microsoft-prod.rpm
 sudo yum -y update
@@ -859,6 +870,8 @@ EOS
                                                                     case $opt in
                                                                         "27")
                                                                             cat <<EOS > dotnet.sh
+#!/usr/bin/env bash
+
 printf "\nInstalling .NET Runtime now...\n\n"
 sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
 cd /tmp
@@ -878,6 +891,8 @@ EOS
                                                                             ;;
                                                                         "28")
                                                                             cat <<EOS > dotnet.sh
+#!/usr/bin/env bash
+
 printf "\nInstalling .NET Runtime now...\n\n"
 sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
 cd /tmp
@@ -899,6 +914,7 @@ EOS
                                                                     esac
                                                                 done
                                                             }
+                                                            clear
                                                             releases
                                                             break
                                                             ;;
@@ -906,6 +922,7 @@ EOS
                                                     esac
                                                 done
                                             }
+                                            clear
                                             dotnetArm
                                             break
                                             ;;
@@ -948,6 +965,8 @@ EOS
                                         case $opt in
                                             "Fedora")
                                                 cat <<EOS > x42node-service.sh
+#!/usr/bin/env bash
+
 printf "\nCreating x42node.service.\n\n"
 sudo touch /etc/systemd/system/x42node.service
 sudo -s <<SUDO
@@ -995,6 +1014,8 @@ EOS
                                                 ;;
                                             "Ubuntu/Debian")
                                                 cat <<EOS > x42node-service.sh
+#!/usr/bin/env bash
+
 printf "\nCreating x42node.service.\n\n"
 cat <<EOF > ~/x42node.service
 [Unit]
@@ -1039,6 +1060,8 @@ EOS
                                                 ;;
                                             "CentOS")
                                                 cat <<EOS > x42node-service.sh
+#!/usr/bin/env bash
+
 printf "\nCreating x42node.service.\n\n"
 cat <<EOF > ~/x42node.service
 [Unit]
@@ -1223,6 +1246,8 @@ EOS
                                                                         case $opt in
                                                                             "16.04")
                                                                                 cat <<EOS > dotnet.sh
+#!/usr/bin/env bash
+
 printf "\nInstalling .NET Runtime now...\n\n"
 cd /tmp
 wget -q https://packages.microsoft.com/config/ubuntu/16.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
@@ -1245,6 +1270,8 @@ EOS
                                                                                 ;;
                                                                             "18.04/18.10")
                                                                                 cat <<EOS > dotnet.sh
+#!/usr/bin/env bash
+
 printf "\nInstalling .NET Runtime now...\n\n"
 cd /tmp
 wget -q https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
@@ -1292,6 +1319,8 @@ EOS
                                                                                 ;;
                                                                             "19.04")
                                                                                 cat <<EOS > dotnet.sh
+#!/usr/bin/env bash
+
 printf "\nInstalling .NET Runtime now...\n\n"
 cd /tmp
 wget -q https://packages.microsoft.com/config/ubuntu/19.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
@@ -1349,6 +1378,8 @@ EOS
                                                                 ;;
                                                             "Debian")
                                                                 cat <<EOS > dotnet.sh
+#!/usr/bin/env bash
+
 printf "\nInstalling .NET runtime now...\n\n"
 cd /tmp
 wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.asc.gpg
@@ -1375,6 +1406,8 @@ EOS
                                                                 ;;
                                                             "CentOS")
                                                                 cat <<EOS > dotnet.sh
+#!/usr/bin/env bash
+
 printf "\nInstalling .NET Runtime now...\n\n"
 sudo rpm -Uvh https://packages.microsoft.com/config/rhel/7/packages-microsoft-prod.rpm
 sudo yum -y update
@@ -1400,6 +1433,8 @@ EOS
                                                                         case $opt in
                                                                             "27")
                                                                                 cat <<EOS > dotnet.sh
+#!/usr/bin/env bash
+
 printf "\nInstalling .NET Runtime now...\n\n"
 sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
 cd /tmp
@@ -1421,6 +1456,8 @@ EOS
                                                                                 ;;
                                                                             "28")
                                                                                 cat <<EOS > dotnet.sh
+#!/usr/bin/env bash
+
 printf "\nInstalling .NET Runtime now...\n\n"
 sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
 cd /tmp
@@ -1596,6 +1633,8 @@ EOS
                                                                         case $opt in
                                                                             "16.04")
                                                                                 cat <<EOS > dotnet.sh
+#!/usr/bin/env bash
+
 printf "\nInstalling .NET Runtime now...\n\n"
 cd /tmp
 wget -q https://packages.microsoft.com/config/ubuntu/16.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
@@ -1618,6 +1657,8 @@ EOS
                                                                                 ;;
                                                                             "18.04/18.10")
                                                                                 cat <<EOS > dotnet.sh
+#!/usr/bin/env bash
+
 printf "\nInstalling .NET Runtime now...\n\n"
 cd /tmp
 wget -q https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
@@ -1665,6 +1706,8 @@ EOS
                                                                                 ;;
                                                                             "19.04")
                                                                                 cat <<EOS > dotnet.sh
+#!/usr/bin/env bash
+
 printf "\nInstalling .NET Runtime now...\n\n"
 cd /tmp
 wget -q https://packages.microsoft.com/config/ubuntu/19.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
@@ -1722,6 +1765,8 @@ EOS
                                                                 ;;
                                                             "Debian")
                                                                 cat <<EOS > dotnet.sh
+#!/usr/bin/env bash
+
 printf "\nInstalling .NET runtime now...\n\n"
 cd /tmp
 wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.asc.gpg
@@ -1748,6 +1793,8 @@ EOS
                                                                 ;;
                                                             "CentOS")
                                                                 cat <<EOS > dotnet.sh
+#!/usr/bin/env bash
+
 printf "\nInstalling .NET Runtime now...\n\n"
 sudo rpm -Uvh https://packages.microsoft.com/config/rhel/7/packages-microsoft-prod.rpm
 sudo yum -y update
@@ -1773,6 +1820,8 @@ EOS
                                                                         case $opt in
                                                                             "27")
                                                                                 cat <<EOS > dotnet.sh
+#!/usr/bin/env bash
+
 printf "\nInstalling .NET Runtime now...\n\n"
 sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
 cd /tmp
@@ -1794,6 +1843,8 @@ EOS
                                                                                 ;;
                                                                             "28")
                                                                                 cat <<EOS > dotnet.sh
+#!/usr/bin/env bash
+
 printf "\nInstalling .NET Runtime now...\n\n"
 sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
 cd /tmp
@@ -1891,6 +1942,8 @@ EOS
                                         case $opt in
                                             "Fedora")
                                                 cat <<EOS > x42node-service.sh
+#!/usr/bin/env bash
+
 printf "\nCreating x42node.service.\n\n"
 sudo touch /etc/systemd/system/x42node.service
 sudo -s <<SUDO
@@ -1932,6 +1985,8 @@ EOS
                                                 ;;
                                             "Ubuntu/Debian")
                                                 cat <<EOS > x42node-service.sh
+#!/usr/bin/env bash
+
 printf "\nCreating x42node.service.\n\n"
 cat <<EOF > ~/x42node.service
 [Unit]
@@ -1970,6 +2025,8 @@ EOS
                                                 ;;
                                             "CentOS")
                                                 cat <<EOS > x42node-service.sh
+#!/usr/bin/env bash
+
 printf "\nCreating x42node.service.\n\n"
 cat <<EOF > ~/x42node.service
 [Unit]
