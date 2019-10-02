@@ -1,5 +1,3 @@
-#!/bin/bash
-#
 # Created by: cr4zys4mw1se
 #
 # Donation Addresses:
@@ -7,6 +5,26 @@
 # BTC: 145QLo9jopWK3Z7h43fEgTy7AbUA239Ghz
 # LTC: LVkLucNkv43Zwpqx1Vb1mymnQR2YLPXzZR
 #
+############################################################
+# License: GNU GPLv3
+#    x42 Bash Scripts - Install or update your X42-FullNode
+#    Copyright (C) 2019  cr4zys4mw1se
+#
+#    This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+############################################################
+
+#!/usr/bin/env bash
 
 printf "\nChecking Linux version and if dotnet is installed...\n\n"
 if [ -x "$(command -v apt -v)" ]; then
