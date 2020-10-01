@@ -30,15 +30,7 @@ printf "\nChecking Linux version and if dotnet is installed...\n\n"
 if [ -x "$(command -v apt -v)" ]; then
     osR="$(lsb_release -r -s)"
     if [ ! -x "$(command -v dotnet --list-sdks)" ]; then
-        if [ $osR == "16.04" ]; then
-            printf "Using Ubuntu $osR.\n\ndotnet is not installed.\n\nInstalling now..\n\n"
-            cd /tmp
-            wget -q https://packages.microsoft.com/config/ubuntu/16.04/packages-microsoft-prod.deb
-            sudo dpkg -i packages-microsoft-prod.deb
-            sudo apt -y install apt-transport-https
-            sudo apt update
-            sudo apt -y install dotnet-sdk-2.2
-        elif [ $osR == "18.04" -o $osR == "18.10" ]; then
+        if [ $osR == "18.04" ]; then
             printf "Using Ubuntu $osR.\n\ndotnet is not installed.\n\nInstalling now..\n\n"
             cd /tmp
             wget -q https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb
@@ -47,39 +39,6 @@ if [ -x "$(command -v apt -v)" ]; then
             sudo apt -y install apt-transport-https
             sudo apt update
             sudo apt -y install dotnet-sdk-2.2
-        elif [ $osR == "19.04" ]; then
-            printf "Using Ubuntu $osR.\n\ndotnet is not installed.\n\nInstalling now..\n\n"
-            cd /tmp
-            wget -q https://packages.microsoft.com/config/ubuntu/19.04/packages-microsoft-prod.deb
-            sudo dpkg -i packages-microsoft-prod.deb
-            sudo apt -y install apt-transport-https
-            sudo apt update
-            sudo apt -y install dotnet-sdk-2.2
-            if [ ! -x "$(command -v dotnet --list-sdks)" ]; then
-                printf "\nThere may have been an error while installing. Attempting alternative method...\n\n"
-                cd /tmp
-                sudo dpkg --purge packages-microsoft-prod && sudo dpkg -i packages-microsoft-prod.deb
-                sudo apt update
-                sudo apt -y install dotnet-sdk-2.2
-                if [ ! -x "$(command -v dotnet --list-sdks)" ]; then
-                    printf "\nThere may have been another error while installing dotnet.\n\nAttempting final alternative installation method provided by Microsoft...\n\n"
-                    cd /tmp
-                    sudo apt -y install gpg
-                    wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.asc.gpg
-                    sudo mv microsoft.asc.gpg /etc/apt/trusted.gpg.d/
-                    wget -q https://packages.microsoft.com/config/ubuntu/19.04/prod.list
-                    sudo mv prod.list /etc/apt/sources.list.d/microsoft-prod.list
-                    sudo chown root:root /etc/apt/trusted.gpg.d/microsoft.asc.gpg
-                    sudo chown root:root /etc/apt/sources.list.d/microsoft-prod.list
-                    sudo apt -y install apt-transport-https
-                    sudo apt update
-                    sudo apt -y install dotnet-sdk-2.2
-                    if [ ! -x "$(command -v dotnet --list-sdks)" ]; then
-                        printf "\nIt appears dotnet is not installing properly.\n\nPlease review: https://dotnet.microsoft.com/download/linux-package-manager/ubuntu19-04/sdk-current\n\nPlease attempt installing dotnet manually using the information provided. Verify installation with 'dotnet --list-sdks' before running this script again.\n\nExiting.\n\n"
-                        exit 1
-                    fi
-                fi
-            fi
         else
             printf "You may not be on a correct Linux version.\n\nPlease try again later.\n\n"
             exit 1
