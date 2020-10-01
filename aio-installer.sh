@@ -67,15 +67,7 @@ mainMenu(){
                                             exit 1
                                         fi
                                     elif [ "$os" == "Ubuntu" ]; then
-                                        if [ "$osR" == "16.04" ]; then
-                                            printf "\nUsing: $os $osR\n\n.NET SDK not installed\n\nInstalling now...\n\n"
-                                            cd /tmp
-                                            wget -q https://packages.microsoft.com/config/ubuntu/16.04/packages-microsoft-prod.deb
-                                            sudo dpkg -i packages-microsoft-prod.deb
-                                            sudo apt -y install apt-transport-https
-                                            sudo apt update
-                                            sudo apt -y install dotnet-sdk-2.2
-                                        elif [ "$osR" == "18.04" -o "$osR" == "18.10" ]; then
+                                        if [ "$osR" == "18.04" ]; then
                                             printf "\nUsing: $os $osR\n\n.NET SDK not installed\n\nInstalling now...\n\n"
                                             cd /tmp
                                             wget -q https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb
@@ -84,39 +76,6 @@ mainMenu(){
                                             sudo apt -y install apt-transport-https
                                             sudo apt update
                                             sudo apt -y install dotnet-sdk-2.2
-                                        elif [ "$osR" == "19.04" ]; then
-                                            printf "\nUsing: $os $osR\n\n.NET SDK not installed\n\nInstalling now...\n\n"
-                                            cd /tmp
-                                            wget -q https://packages.microsoft.com/config/ubuntu/19.04/packages-microsoft-prod.deb
-                                            sudo dpkg -i packages-microsoft-prod.deb
-                                            sudo apt -y install apt-transport-https
-                                            sudo apt update
-                                            sudo apt -y install dotnet-sdk-2.2
-                                            if [ ! -x "$(command -v dotnet --list-sdks)" ]; then
-                                                printf "\nThere may have been an error while installing. Attempting alternative method...\n\n"
-                                                cd /tmp
-                                                sudo dpkg --purge packages-microsoft-prod && sudo dpkg -i packages-microsoft-prod.deb
-                                                sudo apt update
-                                                sudo apt -y install dotnet-sdk-2.2
-                                                if [ ! -x "$(command -v dotnet --list-sdks)" ]; then
-                                                    printf "\nThere may have been another error while installing dotnet.\n\nAttempting final alternative installation method provided by Microsoft...\n\n"
-                                                    cd /tmp
-                                                    sudo apt -y install gpg
-                                                    wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.asc.gpg
-                                                    sudo mv microsoft.asc.gpg /etc/apt/trusted.gpg.d/
-                                                    wget -q https://packages.microsoft.com/config/ubuntu/19.04/prod.list
-                                                    sudo mv prod.list /etc/apt/sources.list.d/microsoft-prod.list
-                                                    sudo chown root:root /etc/apt/trusted.gpg.d/microsoft.asc.gpg
-                                                    sudo chown root:root /etc/apt/sources.list.d/microsoft-prod.list
-                                                    sudo apt -y install apt-transport-https
-                                                    sudo apt update
-                                                    sudo apt -y install dotnet-sdk-2.2
-                                                    if [ ! -x "$(command -v dotnet --list-sdks)" ]; then
-                                                        printf "\nIt appears dotnet is not installing properly.\n\nPlease review: https://dotnet.microsoft.com/download/linux-package-manager/ubuntu19-04/sdk-current\n\nPlease attempt installing dotnet manually using the information provided. Verify installation with 'dotnet --list-sdks' before running this script again.\n\nExiting.\n\n"
-                                                        exit 1
-                                                    fi
-                                                fi
-                                            fi
                                         else
                                             printf "\nYou may not be running the proper Ubuntu release.\n\nPlease verify it's able to run this.\n\n"
                                             exit 1
@@ -126,25 +85,6 @@ mainMenu(){
                                         sudo rpm -Uvh https://packages.microsoft.com/config/rhel/7/packages-microsoft-prod.rpm
                                         sudo yum -y update
                                         sudo yum -y install dotnet-sdk-2.2
-                                    elif [ "$os" == "Fedora" ]; then
-                                        if [ "$osR" == "27" ]; then
-                                            printf "\nUsing: $os $osR\n\n.NET SDK not installed\n\nInstalling now...\n\n"
-                                            sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
-                                            cd /tmp
-                                            sudo wget -q -O /etc/yum.repos.d/microsoft-prod.repo https://packages.microsoft.com/config/fedora/27/prod.repo
-                                            sudo dnf -y update
-                                            sudo dnf -y install dotnet-sdk-2.2
-                                        elif [ "$osR" == "28" ]; then
-                                            printf "\nUsing: $os $osR\n\n.NET SDK not installed\n\nInstalling now...\n\n"
-                                            sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
-                                            cd /tmp
-                                            sudo wget -q -O /etc/yum.repos.d/microsoft-prod.repo https://packages.microsoft.com/config/fedora/27/prod.repo
-                                            sudo dnf -y update
-                                            sudo dnf -y install dotnet-sdk-2.2
-                                        else
-                                            printf "\nYou may not be running the proper Fedora release.\n\nPlease verify it's able to run this.\n\n"
-                                            exit 1
-                                        fi
                                     else
                                         printf "\nYou may not be running a proper environment for this script.\n\nPlease verify before running again.\n\n"
                                         exit 1
@@ -160,8 +100,6 @@ mainMenu(){
                                             sudo apt -y install git
                                         elif [ "$os" == "CentOS Linux" ]; then
                                             sudo yum -y install git
-                                        elif [ "$os" == "Fedora" ]; then
-                                            sudo dnf -y install git
                                         else
                                             printf "Git already installed.\n\n"
                                         fi
@@ -191,10 +129,8 @@ mainMenu(){
                                 fi
                                 if [ ! -e "/etc/systemd/system/x42node.service" ]; then
                                     printf "\nSetting up startup service.\n\n"
-                                    if [ "$os" == "Fedora" ]; then
-                                        sudo touch /etc/systemd/system/x42node.service
-                                        sudo -s <<SERVICE
-                                        cat <<EOF > /etc/systemd/system/x42node.service
+                                    sudo mv ~/x42node.service /etc/systemd/system/x42node.service
+                                    cat <<EOF > ~/x42node.service
 [Unit]
 Description=x42 Node
 [Service]
@@ -209,26 +145,6 @@ Environment=ASPNETCORE_ENVIRONMENT=Development
 [Install]
 WantedBy=multi-user.target
 EOF
-SERVICE
-                                        sudo systemctl daemon-reload
-                                    else
-                                        sudo mv ~/x42node.service /etc/systemd/system/x42node.service
-                                        cat <<EOF > ~/x42node.service
-[Unit]
-Description=x42 Node
-[Service]
-WorkingDirectory=/home/$USER/x42node
-ExecStart=/usr/bin/dotnet /home/$USER/x42node/x42.x42D.dll
-Restart=always
-# Restart service after 10 seconds if the dotnet service crashes:
-RestartSec=10
-SyslogIdentifier=x42node
-User=$USER
-Environment=ASPNETCORE_ENVIRONMENT=Development
-[Install]
-WantedBy=multi-user.target
-EOF
-                                    fi
                                     printf "\nStarting x42node.service\n\n"
                                     sudo systemctl start x42node.service
                                     printf "Verifying service started\n\n"
@@ -267,15 +183,7 @@ EOF
                                             exit 1
                                         fi
                                     elif [ "$os" == "Ubuntu" ]; then
-                                        if [ "$osR" == "16.04" ]; then
-                                            printf "\nUsing: $os $osR\n\n.NET SDK not installed\n\nInstalling now...\n\n"
-                                            cd /tmp
-                                            wget -q https://packages.microsoft.com/config/ubuntu/16.04/packages-microsoft-prod.deb
-                                            sudo dpkg -i packages-microsoft-prod.deb
-                                            sudo apt -y install apt-transport-https
-                                            sudo apt update
-                                            sudo apt -y install dotnet-sdk-2.2
-                                        elif [ "$osR" == "18.04" -o "$osR" == "18.10" ]; then
+                                        if [ "$osR" == "18.04" ]; then
                                             printf "\nUsing: $os $osR\n\n.NET SDK not installed\n\nInstalling now...\n\n"
                                             cd /tmp
                                             wget -q https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb
@@ -284,39 +192,6 @@ EOF
                                             sudo apt -y install apt-transport-https
                                             sudo apt update
                                             sudo apt -y install dotnet-sdk-2.2
-                                        elif [ "$osR" == "19.04" ]; then
-                                            printf "\nUsing: $os $osR\n\n.NET SDK not installed\n\nInstalling now...\n\n"
-                                            cd /tmp
-                                            wget -q https://packages.microsoft.com/config/ubuntu/19.04/packages-microsoft-prod.deb
-                                            sudo dpkg -i packages-microsoft-prod.deb
-                                            sudo apt -y install apt-transport-https
-                                            sudo apt update
-                                            sudo apt -y install dotnet-sdk-2.2
-                                            if [ ! -x "$(command -v dotnet --list-sdks)" ]; then
-                                                printf "\nThere may have been an error while installing. Attempting alternative method...\n\n"
-                                                cd /tmp
-                                                sudo dpkg --purge packages-microsoft-prod && sudo dpkg -i packages-microsoft-prod.deb
-                                                sudo apt update
-                                                sudo apt -y install dotnet-sdk-2.2
-                                                if [ ! -x "$(command -v dotnet --list-sdks)" ]; then
-                                                    printf "\nThere may have been another error while installing dotnet.\n\nAttempting final alternative installation method provided by Microsoft...\n\n"
-                                                    cd /tmp
-                                                    sudo apt -y install gpg
-                                                    wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.asc.gpg
-                                                    sudo mv microsoft.asc.gpg /etc/apt/trusted.gpg.d/
-                                                    wget -q https://packages.microsoft.com/config/ubuntu/19.04/prod.list
-                                                    sudo mv prod.list /etc/apt/sources.list.d/microsoft-prod.list
-                                                    sudo chown root:root /etc/apt/trusted.gpg.d/microsoft.asc.gpg
-                                                    sudo chown root:root /etc/apt/sources.list.d/microsoft-prod.list
-                                                    sudo apt -y install apt-transport-https
-                                                    sudo apt update
-                                                    sudo apt -y install dotnet-sdk-2.2
-                                                    if [ ! -x "$(command -v dotnet --list-sdks)" ]; then
-                                                        printf "\nIt appears dotnet is not installing properly.\n\nPlease review: https://dotnet.microsoft.com/download/linux-package-manager/ubuntu19-04/sdk-current\n\nPlease attempt installing dotnet manually using the information provided. Verify installation with 'dotnet --list-sdks' before running this script again.\n\nExiting.\n\n"
-                                                        exit 1
-                                                    fi
-                                                fi
-                                            fi
                                         else
                                             printf "\nYou may not be running the proper Ubuntu release.\n\nPlease verify it's able to run this.\n\n"
                                             exit 1
@@ -326,25 +201,6 @@ EOF
                                         sudo rpm -Uvh https://packages.microsoft.com/config/rhel/7/packages-microsoft-prod.rpm
                                         sudo yum -y update
                                         sudo yum -y install dotnet-sdk-2.2
-                                    elif [ "$os" == "Fedora" ]; then
-                                        if [ "$osR" == "27" ]; then
-                                            printf "\nUsing: $os $osR\n\n.NET SDK not installed\n\nInstalling now...\n\n"
-                                            sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
-                                            cd /tmp
-                                            sudo wget -q -O /etc/yum.repos.d/microsoft-prod.repo https://packages.microsoft.com/config/fedora/27/prod.repo
-                                            sudo dnf -y update
-                                            sudo dnf -y install dotnet-sdk-2.2
-                                        elif [ "$osR" == "28" ]; then
-                                            printf "\nUsing: $os $osR\n\n.NET SDK not installed\n\nInstalling now...\n\n"
-                                            sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
-                                            cd /tmp
-                                            sudo wget -q -O /etc/yum.repos.d/microsoft-prod.repo https://packages.microsoft.com/config/fedora/27/prod.repo
-                                            sudo dnf -y update
-                                            sudo dnf -y install dotnet-sdk-2.2
-                                        else
-                                            printf "\nYou may not be running the proper Fedora release.\n\nPlease verify it's able to run this.\n\n"
-                                            exit 1
-                                        fi
                                     else
                                         printf "\nYou may not be running a proper environment for this script.\n\nPlease verify before running again.\n\n"
                                         exit 1
@@ -373,8 +229,6 @@ EOF
                                             sudo apt -y install git
                                         elif [ "$os" == "CentOS Linux" ]; then
                                             sudo yum -y install git
-                                        elif [ "$os" == "Fedora" ]; then
-                                            sudo dnf -y install git
                                         else
                                             printf "Git already installed.\n\n"
                                         fi
@@ -414,10 +268,7 @@ EOF
                             "Setup x42node.service Only")
                                 if [ ! -e "/etc/systemd/system/x42node.service" ]; then
                                     printf "\nSetting up startup service.\n\n(Will Not Start/Stop Existing Service IF One Exists)"
-                                    if [ "$os" == "Fedora" ]; then
-                                        sudo touch /etc/systemd/system/x42node.service
-                                        sudo -s <<SUDO
-                                        cat <<EOF > /etc/systemd/system/x42node.service
+                                    cat <<EOF > ~/x42node.service
 [Unit]
 Description=x42 Node
 [Service]
@@ -432,37 +283,12 @@ Environment=ASPNETCORE_ENVIRONMENT=Development
 [Install]
 WantedBy=multi-user.target
 EOF
-SUDO
-                                        sudo systemctl daemon-reload
-                                        if [ -e "/etc/systemd/system/x42node.service" ]; then
-                                            printf "\nFinished setup of: x42node.service.\n\nReturning to prior Menu in 5s...\n\n"
-                                        else
-                                            printf "\nx42node.service creation failed.\n\nExiting script.\n\n"
-                                            exit 1
-                                        fi
+                                    sudo mv ~/x42node.service /etc/systemd/system/x42node.service
+                                    if [ -e "/etc/systemd/system/x42node.service" ]; then
+                                        printf "\nFinished setup of: x42node.service.\n\nReturning to prior Menu in 5s...\n\n"
                                     else
-                                        cat <<EOF > ~/x42node.service
-[Unit]
-Description=x42 Node
-[Service]
-WorkingDirectory=/home/$USER/x42node
-ExecStart=/usr/bin/dotnet /home/$USER/x42node/x42.x42D.dll
-Restart=always
-# Restart service after 10 seconds if the dotnet service crashes:
-RestartSec=10
-SyslogIdentifier=x42node
-User=$USER
-Environment=ASPNETCORE_ENVIRONMENT=Development
-[Install]
-WantedBy=multi-user.target
-EOF
-                                        sudo mv ~/x42node.service /etc/systemd/system/x42node.service
-                                        if [ -e "/etc/systemd/system/x42node.service" ]; then
-                                            printf "\nFinished setup of: x42node.service.\n\nReturning to prior Menu in 5s...\n\n"
-                                        else
-                                            printf "\nx42node.service creation failed.\n\nExiting script.\n\n"
-                                            exit 1
-                                        fi
+                                        printf "\nx42node.service creation failed.\n\nExiting script.\n\n"
+                                        exit 1
                                     fi
                                 fi
                                 sleep 5
@@ -619,15 +445,7 @@ EOF
                                             exit 1
                                         fi
                                     elif [ "$os" == "Ubuntu" ]; then
-                                        if [ "$osR" == "16.04" ]; then
-                                            printf "\nUsing: $os $osR, Installing .NET SDK now...\n\n"
-                                            cd /tmp
-                                            wget -q https://packages.microsoft.com/config/ubuntu/16.04/packages-microsoft-prod.deb
-                                            sudo dpkg -i packages-microsoft-prod.deb
-                                            sudo apt -y install apt-transport-https
-                                            sudo apt update
-                                            sudo apt -y install dotnet-sdk-2.2
-                                        elif [ "$osR" == "18.04" -o "$osR" == "18.10" ]; then
+                                        if [ "$osR" == "18.04" ]; then
                                             printf "\nUsing: $os $osR, Installing .NET SDK now...\n\n"
                                             cd /tmp
                                             wget -q https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb
@@ -636,39 +454,6 @@ EOF
                                             sudo apt -y install apt-transport-https
                                             sudo apt update
                                             sudo apt -y install dotnet-sdk-2.2
-                                        elif [ "$osR" == "19.04" ]; then
-                                            printf "\nUsing: $os $osR, Installing .NET SDK now...\n\n"
-                                            cd /tmp
-                                            wget -q https://packages.microsoft.com/config/ubuntu/19.04/packages-microsoft-prod.deb
-                                            sudo dpkg -i packages-microsoft-prod.deb
-                                            sudo apt -y install apt-transport-https
-                                            sudo apt update
-                                            sudo apt -y install dotnet-sdk-2.2
-                                            if [ ! -x "$(command -v dotnet --list-sdks)" ]; then
-                                                printf "\nThere may have been an error while installing. Attempting alternative method...\n\n"
-                                                cd /tmp
-                                                sudo dpkg --purge packages-microsoft-prod && sudo dpkg -i packages-microsoft-prod.deb
-                                                sudo apt update
-                                                sudo apt -y install dotnet-sdk-2.2
-                                                if [ ! -x "$(command -v dotnet --list-sdks)" ]; then
-                                                    printf "\nThere may have been another error while installing dotnet.\n\nAttempting final alternative installation method provided by Microsoft...\n\n"
-                                                    cd /tmp
-                                                    sudo apt -y install gpg
-                                                    wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.asc.gpg
-                                                    sudo mv microsoft.asc.gpg /etc/apt/trusted.gpg.d/
-                                                    wget -q https://packages.microsoft.com/config/ubuntu/19.04/prod.list
-                                                    sudo mv prod.list /etc/apt/sources.list.d/microsoft-prod.list
-                                                    sudo chown root:root /etc/apt/trusted.gpg.d/microsoft.asc.gpg
-                                                    sudo chown root:root /etc/apt/sources.list.d/microsoft-prod.list
-                                                    sudo apt -y install apt-transport-https
-                                                    sudo apt update
-                                                    sudo apt -y install dotnet-sdk-2.2
-                                                    if [ ! -x "$(command -v dotnet --list-sdks)" ]; then
-                                                        printf "\nIt appears dotnet is not installing properly.\n\nPlease review: https://dotnet.microsoft.com/download/linux-package-manager/ubuntu19-04/sdk-current\n\nPlease attempt installing dotnet manually using the information provided. Verify installation with 'dotnet --list-sdks' before running this script again.\n\nExiting.\n\n"
-                                                        exit 1
-                                                    fi
-                                                fi
-                                            fi
                                         else
                                             printf "\nYou may not be running the proper Ubuntu release.\n\nPlease verify it's able to run this.\n\n"
                                             exit 1
@@ -678,25 +463,6 @@ EOF
                                         sudo rpm -Uvh https://packages.microsoft.com/config/rhel/7/packages-microsoft-prod.rpm
                                         sudo yum -y update
                                         sudo yum -y install dotnet-sdk-2.2
-                                    elif [ "$os" == "Fedora" ]; then
-                                        if [ "$osR" == "27" ]; then
-                                            printf "\nUsing: $os $osR, Installing .NET SDK now...\n\n"
-                                            sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
-                                            cd /tmp
-                                            sudo wget -q -O /etc/yum.repos.d/microsoft-prod.repo https://packages.microsoft.com/config/fedora/27/prod.repo
-                                            sudo dnf -y update
-                                            sudo dnf -y install dotnet-sdk-2.2
-                                        elif [ "$osR" == "28" ]; then
-                                            printf "\nUsing: $os $osR, Installing .NET SDK now...\n\n"
-                                            sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
-                                            cd /tmp
-                                            sudo wget -q -O /etc/yum.repos.d/microsoft-prod.repo https://packages.microsoft.com/config/fedora/27/prod.repo
-                                            sudo dnf -y update
-                                            sudo dnf -y install dotnet-sdk-2.2
-                                        else
-                                            printf "\nYou may not be running the proper Fedora release.\n\nPlease verify it's able to run this.\n\n"
-                                            exit 1
-                                        fi
                                     fi
                                 elif [ -x "$(command -v dotnet --list-sdks)" ]; then
                                     printf "\n.NET SDK already installed.\n\nInstalling .NET runtime on ARM device...\n\n"
@@ -712,39 +478,17 @@ EOF
                                             ;;
                                         n|N ) 
                                             dotnetArm(){
-                                                choices=("Ubuntu" "Debian" "CentOS" "Fedora")
+                                                choices=("Ubuntu" "Debian" "CentOS")
                                                 select opt in "${choices[@]}"
                                                 do
                                                     case $opt in
                                                         "Ubuntu")
                                                             releases(){
-                                                                choices=("16.04" "18.04/18.10" "19.04")
+                                                                choices=("18.04")
                                                                 select opt in "${choices[@]}"
                                                                 do
                                                                     case $opt in
-                                                                        "16.04")
-                                                                            cat <<EOS > dotnet.sh
-#!/usr/bin/env bash
-
-printf "\nInstalling .NET Runtime now...\n\n"
-cd /tmp
-wget -q https://packages.microsoft.com/config/ubuntu/16.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
-sudo dpkg -i packages-microsoft-prod.deb
-sudo apt -y install apt-transport-https
-sudo apt update
-sudo apt -y install aspnetcore-runtime-2.2
-EOS
-                                                                            chmod +x dotnet.sh
-                                                                            printf "\nSending script to ARM device.\n\n"
-                                                                            rsync -ahP dotnet.sh $username@$ipAddr:/home/$username
-                                                                            printf "\nLaunching script to install .NET runtime.\n\n"
-                                                                            ssh $username@$ipAddr "bash -s" < dotnet.sh
-                                                                            printf "\nRemoving script that was created and used...\n\n"
-                                                                            ssh $username@$ipAddr "rm -rf ~/dotnet.sh"
-                                                                            rm -rf dotnet.sh
-                                                                            break
-                                                                            ;;
-                                                                        "18.04/18.10")
+                                                                        "18.04")
                                                                             cat <<EOS > dotnet.sh
 #!/usr/bin/env bash
 
@@ -772,51 +516,6 @@ if [ ! -x "$(command -v dotnet --list-sdks)" ]; then
         sudo chown root:root /etc/apt/trusted.gpg.d/microsoft.asc.gpg
         sudo chown root:root /etc/apt/sources.list.d/microsoft-prod.list
         sudo apt -y install -y apt-transport-https
-        sudo apt update
-        sudo apt -y install aspnetcore-runtime-2.2
-        if [ ! -x "$(command -v dotnet --list-sdks)" ]; then
-            printf "\nFor some reason .NET runtime failed to install.\n\nPlease verify on the ARM device using: dotnet --list-sdks"
-        fi
-    fi
-fi
-EOS
-                                                                            chmod +x dotnet.sh
-                                                                            printf "\nSending script to ARM device.\n\n"
-                                                                            rsync -ahP dotnet.sh $username@$ipAddr:/home/$username
-                                                                            printf "\nLaunching script to install .NET runtime.\n\n"
-                                                                            ssh $username@$ipAddr "bash -s" < dotnet.sh
-                                                                            printf "\nRemoving script that was created and used...\n\n"
-                                                                            ssh $username@$ipAddr "rm -rf ~/dotnet.sh"
-                                                                            rm -rf dotnet.sh
-                                                                            break
-                                                                            ;;
-                                                                        "19.04")
-                                                                            cat <<EOS > dotnet.sh
-#!/usr/bin/env bash
-
-printf "\nInstalling .NET Runtime now...\n\n"
-cd /tmp
-wget -q https://packages.microsoft.com/config/ubuntu/19.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
-sudo dpkg -i packages-microsoft-prod.deb
-sudo apt -y install apt-transport-https
-sudo apt update
-sudo apt -y install aspnetcore-runtime-2.2
-if [ ! -x "$(command -v dotnet --list-sdks)" ]; then
-    printf "\n.NET runtime may not have installed properly.\n\nAttempting alternative method...\n\n"
-    sudo dpkg --purge packages-microsoft-prod && sudo dpkg -i packages-microsoft-prod.deb
-    sudo apt update
-    sudo apt -y install aspnetcore-runtime-2.2
-    if [ ! -x "$(command -v dotnet --list-sdks)" ]; then
-        printf "\n.NET runtime may still be having issues installing.\n\nAttempting final alternative method provided by Microsoft.\n\n"
-        cd /tmp
-        sudo apt -y install -y gpg
-        wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.asc.gpg
-        sudo mv microsoft.asc.gpg /etc/apt/trusted.gpg.d/
-        wget -q https://packages.microsoft.com/config/ubuntu/19.04/prod.list
-        sudo mv prod.list /etc/apt/sources.list.d/microsoft-prod.list
-        sudo chown root:root /etc/apt/trusted.gpg.d/microsoft.asc.gpg
-        sudo chown root:root /etc/apt/sources.list.d/microsoft-prod.list
-        sudo apt -y install apt-transport-https
         sudo apt update
         sudo apt -y install aspnetcore-runtime-2.2
         if [ ! -x "$(command -v dotnet --list-sdks)" ]; then
@@ -888,62 +587,6 @@ EOS
                                                             rm -rf dotnet.sh
                                                             break
                                                             ;;
-                                                        "Fedora")
-                                                            releases(){
-                                                                choices=("27" "28")
-                                                                select opt in "${choices[@]}"
-                                                                do
-                                                                    case $opt in
-                                                                        "27")
-                                                                            cat <<EOS > dotnet.sh
-#!/usr/bin/env bash
-
-printf "\nInstalling .NET Runtime now...\n\n"
-sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
-cd /tmp
-sudo wget -q -O /etc/yum.repos.d/microsoft-prod.repo https://packages.microsoft.com/config/fedora/27/prod.repo
-sudo dnf -y update
-sudo dnf -y install aspnetcore-runtime-2.2
-EOS
-                                                                            chmod +x dotnet.sh
-                                                                            printf "\nSending script to ARM device.\n\n"
-                                                                            rsync -ahP dotnet.sh $username@$ipAddr:/home/$username
-                                                                            printf "\nLaunching script to install .NET runtime.\n\n"
-                                                                            ssh $username@$ipAddr "bash -s" < dotnet.sh
-                                                                            printf "\nRemoving script that was created and used...\n\n"
-                                                                            ssh $username@$ipAddr "rm -rf ~/dotnet.sh"
-                                                                            rm -rf dotnet.sh
-                                                                            break
-                                                                            ;;
-                                                                        "28")
-                                                                            cat <<EOS > dotnet.sh
-#!/usr/bin/env bash
-
-printf "\nInstalling .NET Runtime now...\n\n"
-sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
-cd /tmp
-sudo wget -q -O /etc/yum.repos.d/microsoft-prod.repo https://packages.microsoft.com/config/fedora/27/prod.repo
-sudo dnf -y update
-sudo dnf -y install aspnetcore-runtime-2.2
-EOS
-                                                                            chmod +x dotnet.sh
-                                                                            printf "\nSending script to ARM device.\n\n"
-                                                                            rsync -ahP dotnet.sh $username@$ipAddr:/home/$username
-                                                                            printf "\nLaunching script to install .NET runtime.\n\n"
-                                                                            ssh $username@$ipAddr "bash -s" < dotnet.sh
-                                                                            printf "\nRemoving script that was created and used...\n\n"
-                                                                            ssh $username@$ipAddr "rm -rf ~/dotnet.sh"
-                                                                            rm -rf dotnet.sh
-                                                                            break
-                                                                            ;;
-                                                                        *) printf "\nInvalid option: $REPLY\n\nPlease try another option, ";;
-                                                                    esac
-                                                                done
-                                                            }
-                                                            clear
-                                                            releases
-                                                            break
-                                                            ;;
                                                         *) printf "\nInvalid option: $REPLY\n\nPlease try another option, ";;
                                                     esac
                                                 done
@@ -985,59 +628,10 @@ EOS
                                 fi
                                 osChoice(){
                                     printf "\n     ARM x42node.service Setup     \n\nWhich OS is your ARM device using?\n\n"
-                                    choices=("Fedora" "Ubuntu/Debian" "CentOS")
+                                    choices=("Ubuntu/Debian" "CentOS")
                                     select opt in "${choices[@]}"
                                     do
                                         case $opt in
-                                            "Fedora")
-                                                cat <<EOS > x42node-service.sh
-#!/usr/bin/env bash
-
-printf "\nCreating x42node.service.\n\n"
-sudo touch /etc/systemd/system/x42node.service
-sudo -s <<SUDO
-cat <<EOF > /etc/systemd/system/x42node.service
-[Unit]
-Description=x42 Node
-[Service]
-WorkingDirectory=/home/$username/x42node
-ExecStart=/usr/bin/dotnet /home/$username/x42node/x42.x42D.dll
-Restart=always
-# Restart service after 10 seconds if the dotnet service crashes:
-RestartSec=10
-SyslogIdentifier=x42node
-User=$username
-Environment=ASPNETCORE_ENVIRONMENT=Development
-[Install]
-WantedBy=multi-user.target
-EOF
-SUDO
-sudo systemctl daemon-reload
-if [ -e "/etc/systemd/system/x42node.service" ]; then
-    printf "\nFinished setup of: x42node.service.\n\n"
-else
-    printf "\nx42node.service creation failed.\n\nExiting script.\n\n"
-    exit 1
-fi
-printf "\nStarting x42node.service\n\n"
-sudo systemctl start x42node.service
-sleep 1.25
-if [ "$(systemctl is-active x42node.service)" == "active" ]; then
-    printf "\nThe x42-FullNode is currently active.\n\nYou can now SSH to the ARM device and check the status using: curl http://127.0.0.1:42220/api/Dashbaord/Stats"
-else
-    printf "\nIt appears x42node.service did not setup properly.\n\nCheck via SSH using: sudo systemctl status x42node.service\n\n"
-fi
-EOS
-                                                chmod +x x42node-service.sh
-                                                printf "\nSending script to ARM device.\n\n"
-                                                rsync -ahP x42node-service.sh $username@$ipAddr:/home/$username
-                                                printf "\nLaunching script to setup x42node.service\n\n"
-                                                ssh $username@$ipAddr "bash -s" < x42node-service.sh
-                                                printf "\nRemoving script that was created and used...\n\n"
-                                                ssh $username@$ipAddr "rm -rf ~/x42node-service.sh"
-                                                rm -rf x42node-service.sh
-                                                exit 1
-                                                ;;
                                             "Ubuntu/Debian")
                                                 cat <<EOS > x42node-service.sh
 #!/usr/bin/env bash
@@ -1165,15 +759,7 @@ EOS
                                                             exit 1
                                                         fi
                                                     elif [ "$os" == "Ubuntu" ]; then
-                                                        if [ "$osR" == "16.04" ]; then
-                                                            printf "\nUsing: $os $osR, Installing .NET SDK now...\n\n"
-                                                            cd /tmp
-                                                            wget -q https://packages.microsoft.com/config/ubuntu/16.04/packages-microsoft-prod.deb
-                                                            sudo dpkg -i packages-microsoft-prod.deb
-                                                            sudo apt -y install apt-transport-https
-                                                            sudo apt update
-                                                            sudo apt -y install dotnet-sdk-2.2
-                                                        elif [ "$osR" == "18.04" -o "$osR" == "18.10" ]; then
+                                                        if [ "$osR" == "18.04" ]; then
                                                             printf "\nUsing: $os $osR, Installing .NET SDK now...\n\n"
                                                             cd /tmp
                                                             wget -q https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb
@@ -1182,39 +768,6 @@ EOS
                                                             sudo apt -y install apt-transport-https
                                                             sudo apt update
                                                             sudo apt -y install dotnet-sdk-2.2
-                                                        elif [ "$osR" == "19.04" ]; then
-                                                            printf "\nUsing: $os $osR, Installing .NET SDK now...\n\n"
-                                                            cd /tmp
-                                                            wget -q https://packages.microsoft.com/config/ubuntu/19.04/packages-microsoft-prod.deb
-                                                            sudo dpkg -i packages-microsoft-prod.deb
-                                                            sudo apt -y install apt-transport-https
-                                                            sudo apt update
-                                                            sudo apt -y install dotnet-sdk-2.2
-                                                            if [ ! -x "$(command -v dotnet --list-sdks)" ]; then
-                                                                printf "\nThere may have been an error while installing. Attempting alternative method...\n\n"
-                                                                cd /tmp
-                                                                sudo dpkg --purge packages-microsoft-prod && sudo dpkg -i packages-microsoft-prod.deb
-                                                                sudo apt update
-                                                                sudo apt -y install dotnet-sdk-2.2
-                                                                if [ ! -x "$(command -v dotnet --list-sdks)" ]; then
-                                                                    printf "\nThere may have been another error while installing dotnet.\n\nAttempting final alternative installation method provided by Microsoft...\n\n"
-                                                                    cd /tmp
-                                                                    sudo apt -y install gpg
-                                                                    wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.asc.gpg
-                                                                    sudo mv microsoft.asc.gpg /etc/apt/trusted.gpg.d/
-                                                                    wget -q https://packages.microsoft.com/config/ubuntu/19.04/prod.list
-                                                                    sudo mv prod.list /etc/apt/sources.list.d/microsoft-prod.list
-                                                                    sudo chown root:root /etc/apt/trusted.gpg.d/microsoft.asc.gpg
-                                                                    sudo chown root:root /etc/apt/sources.list.d/microsoft-prod.list
-                                                                    sudo apt -y install apt-transport-https
-                                                                    sudo apt update
-                                                                    sudo apt -y install dotnet-sdk-2.2
-                                                                    if [ ! -x "$(command -v dotnet --list-sdks)" ]; then
-                                                                        printf "\nIt appears dotnet is not installing properly.\n\nPlease review: https://dotnet.microsoft.com/download/linux-package-manager/ubuntu19-04/sdk-current\n\nPlease attempt installing dotnet manually using the information provided. Verify installation with 'dotnet --list-sdks' before running this script again.\n\nExiting.\n\n"
-                                                                        exit 1
-                                                                    fi
-                                                                fi
-                                                            fi
                                                         else
                                                             printf "\nYou may not be running the proper Ubuntu release.\n\nPlease verify it's able to run this.\n\n"
                                                             exit 1
@@ -1224,24 +777,6 @@ EOS
                                                         sudo rpm -Uvh https://packages.microsoft.com/config/rhel/7/packages-microsoft-prod.rpm
                                                         sudo yum -y update
                                                         sudo yum -y install dotnet-sdk-2.2
-                                                    elif [ "$os" == "Fedora" ]; then
-                                                        if [ "$osR" == "27" ]; then
-                                                            printf "\nUsing: $os $osR, Installing .NET SDK now...\n\n"
-                                                            sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
-                                                            cd /tmp
-                                                            sudo wget -q -O /etc/yum.repos.d/microsoft-prod.repo https://packages.microsoft.com/config/fedora/27/prod.repo
-                                                            sudo dnf -y update
-                                                            sudo dnf -y install dotnet-sdk-2.2
-                                                        elif [ "$osR" == "28" ]; then
-                                                            printf "\nUsing: $os $osR, Installing .NET SDK now...\n\n"
-                                                            sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
-                                                            cd /tmp
-                                                            sudo wget -q -O /etc/yum.repos.d/microsoft-prod.repo https://packages.microsoft.com/config/fedora/27/prod.repo
-                                                            sudo dnf -y update
-                                                            sudo dnf -y install dotnet-sdk-2.2
-                                                        else
-                                                            printf "\nYou may not be running the proper Fedora release.\n\nPlease verify it's able to run this.\n\n"
-                                                        fi
                                                     else
                                                         printf "\nYou may not be running a proper environment for this script.\n\nPlease verify before running again.\n\n"
                                                         exit 1
@@ -1260,41 +795,17 @@ EOS
                                                     exit 1
                                                 fi
                                                 dotnetArm(){
-                                                    choices=("Ubuntu" "Debian" "CentOS" "Fedora" "Go Back")
+                                                    choices=("Ubuntu" "Debian" "CentOS" "Go Back")
                                                     select opt in "${choices[@]}"
                                                     do
                                                         case $opt in
                                                             "Ubuntu")
                                                                 releases(){
-                                                                    choices=("16.04" "18.04/18.10" "19.04" "Go Back")
+                                                                    choices=("18.04" "Go Back")
                                                                     select opt in "${choices[@]}"
                                                                     do
                                                                         case $opt in
-                                                                            "16.04")
-                                                                                cat <<EOS > dotnet.sh
-#!/usr/bin/env bash
-
-printf "\nInstalling .NET Runtime now...\n\n"
-cd /tmp
-wget -q https://packages.microsoft.com/config/ubuntu/16.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
-sudo dpkg -i packages-microsoft-prod.deb
-sudo apt -y install apt-transport-https
-sudo apt update
-sudo apt -y install aspnetcore-runtime-2.2
-EOS
-                                                                                chmod +x dotnet.sh
-                                                                                printf "\nSending script to ARM device.\n\n"
-                                                                                rsync -ahP dotnet.sh $username@$ipAddr:/home/$username
-                                                                                printf "\nLaunching script to install .NET runtime.\n\n"
-                                                                                ssh $username@$ipAddr "bash -s" < dotnet.sh
-                                                                                printf "\nRemoving script that was created and used...\n\n"
-                                                                                ssh $username@$ipAddr "rm -rf ~/dotnet.sh"
-                                                                                rm -rf dotnet.sh
-                                                                                printf "\nReturning to prior Menu.\n\n"
-                                                                                clear
-                                                                                instArm
-                                                                                ;;
-                                                                            "18.04/18.10")
+                                                                            "18.04")
                                                                                 cat <<EOS > dotnet.sh
 #!/usr/bin/env bash
 
@@ -1340,58 +851,6 @@ EOS
                                                                                 ssh $username@$ipAddr "rm -rf ~/dotnet.sh"
                                                                                 rm -rf dotnet.sh
                                                                                 printf "\nReturning to prior Menu.\n\n"
-                                                                                clear
-                                                                                instArm
-                                                                                ;;
-                                                                            "19.04")
-                                                                                cat <<EOS > dotnet.sh
-#!/usr/bin/env bash
-
-printf "\nInstalling .NET Runtime now...\n\n"
-cd /tmp
-wget -q https://packages.microsoft.com/config/ubuntu/19.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
-sudo dpkg -i packages-microsoft-prod.deb
-sudo apt -y install apt-transport-https
-sudo apt update
-sudo apt -y install aspnetcore-runtime-2.2
-if [ ! -x "$(command -v dotnet --list-sdks)" ]; then
-    printf "\n.NET runtime may not have installed properly.\n\nAttempting alternative method...\n\n"
-    cd /tmp
-    sudo dpkg --purge packages-microsoft-prod && sudo dpkg -i packages-microsoft-prod.deb
-    sudo apt update
-    sudo apt -y install aspnetcore-runtime-2.2
-    if [ ! -x "$(command -v dotnet --list-sdks)" ]; then
-        printf "\n.NET runtime may still be having issues installing.\n\nAttempting final alternative method provided by Microsoft.\n\n"
-        cd /tmp
-        sudo apt -y install -y gpg
-        wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.asc.gpg
-        sudo mv microsoft.asc.gpg /etc/apt/trusted.gpg.d/
-        wget -q https://packages.microsoft.com/config/ubuntu/19.04/prod.list
-        sudo mv prod.list /etc/apt/sources.list.d/microsoft-prod.list
-        sudo chown root:root /etc/apt/trusted.gpg.d/microsoft.asc.gpg
-        sudo chown root:root /etc/apt/sources.list.d/microsoft-prod.list
-        sudo apt -y install apt-transport-https
-        sudo apt update
-        sudo apt -y install aspnetcore-runtime-2.2
-        if [ ! -x "$(command -v dotnet --list-sdks)" ]; then
-            printf "\nFor some reason .NET runtime failed to install.\n\nPlease verify on the ARM device using: dotnet --list-sdks"
-        fi
-    fi
-fi
-EOS
-                                                                                chmod +x dotnet.sh
-                                                                                printf "\nSending script to ARM device.\n\n"
-                                                                                rsync -ahP dotnet.sh $username@$ipAddr:/home/$username
-                                                                                printf "\nLaunching script to install .NET runtime.\n\n"
-                                                                                ssh $username@$ipAddr "bash -s" < dotnet.sh
-                                                                                printf "\nRemoving script that was created and used...\n\n"
-                                                                                ssh $username@$ipAddr "rm -rf ~/dotnet.sh"
-                                                                                rm -rf dotnet.sh
-                                                                                printf "\nReturning to prior Menu.\n\n"
-                                                                                clear
-                                                                                instArm
-                                                                                ;;
-                                                                            "Go Back")
                                                                                 clear
                                                                                 instArm
                                                                                 ;;
@@ -1450,69 +909,6 @@ EOS
                                                                 printf "\nReturning to prior Menu.\n\n"
                                                                 clear
                                                                 instArm
-                                                                ;;
-                                                            "Fedora")
-                                                                releases(){
-                                                                    choices=("27" "28" "Go Back")
-                                                                    select opt in "${choices[@]}"
-                                                                    do
-                                                                        case $opt in
-                                                                            "27")
-                                                                                cat <<EOS > dotnet.sh
-#!/usr/bin/env bash
-
-printf "\nInstalling .NET Runtime now...\n\n"
-sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
-cd /tmp
-sudo wget -q -O /etc/yum.repos.d/microsoft-prod.repo https://packages.microsoft.com/config/fedora/27/prod.repo
-sudo dnf -y update
-sudo dnf -y install aspnetcore-runtime-2.2
-EOS
-                                                                                chmod +x dotnet.sh
-                                                                                printf "\nSending script to ARM device.\n\n"
-                                                                                rsync -ahP dotnet.sh $username@$ipAddr:/home/$username
-                                                                                printf "\nLaunching script to install .NET runtime.\n\n"
-                                                                                ssh $username@$ipAddr "bash -s" < dotnet.sh
-                                                                                printf "\nRemoving script that was created and used...\n\n"
-                                                                                ssh $username@$ipAddr "rm -rf ~/dotnet.sh"
-                                                                                rm -rf dotnet.sh
-                                                                                printf "\nReturning to prior Menu.\n\n"
-                                                                                clear
-                                                                                instArm
-                                                                                ;;
-                                                                            "28")
-                                                                                cat <<EOS > dotnet.sh
-#!/usr/bin/env bash
-
-printf "\nInstalling .NET Runtime now...\n\n"
-sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
-cd /tmp
-sudo wget -q -O /etc/yum.repos.d/microsoft-prod.repo https://packages.microsoft.com/config/fedora/27/prod.repo
-sudo dnf -y update
-sudo dnf -y install aspnetcore-runtime-2.2
-EOS
-                                                                                chmod +x dotnet.sh
-                                                                                printf "\nSending script to ARM device.\n\n"
-                                                                                rsync -ahP dotnet.sh $username@$ipAddr:/home/$username
-                                                                                printf "\nLaunching script to install .NET runtime.\n\n"
-                                                                                ssh $username@$ipAddr "bash -s" < dotnet.sh
-                                                                                printf "\nRemoving script that was created and used...\n\n"
-                                                                                ssh $username@$ipAddr "rm -rf ~/dotnet.sh"
-                                                                                rm -rf dotnet.sh
-                                                                                printf "\nReturning to prior Menu.\n\n"
-                                                                                clear
-                                                                                instArm
-                                                                                ;;
-                                                                            "Go Back")
-                                                                                clear
-                                                                                dotnetArm
-                                                                                ;;
-                                                                            *) printf "\nInvalid option: $REPLY\n\nPlease try another option, ";;
-                                                                        esac
-                                                                    done
-                                                                }
-                                                                clear
-                                                                releases
                                                                 ;;
                                                             "Go Back")
                                                                 clear
@@ -1546,15 +942,7 @@ EOS
                                                             exit 1
                                                         fi
                                                     elif [ "$os" == "Ubuntu" ]; then
-                                                        if [ "$osR" == "16.04" ]; then
-                                                            printf "\nUsing: $os $osR, Installing .NET SDK now...\n\n"
-                                                            cd /tmp
-                                                            wget -q https://packages.microsoft.com/config/ubuntu/16.04/packages-microsoft-prod.deb
-                                                            sudo dpkg -i packages-microsoft-prod.deb
-                                                            sudo apt -y install apt-transport-https
-                                                            sudo apt update
-                                                            sudo apt -y install dotnet-sdk-2.2
-                                                        elif [ "$osR" == "18.04" -o "$osR" == "18.10" ]; then
+                                                        elif [ "$osR" == "18.04" ]; then
                                                             printf "\nUsing: $os $osR, Installing .NET SDK now...\n\n"
                                                             cd /tmp
                                                             wget -q https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb
@@ -1563,39 +951,6 @@ EOS
                                                             sudo apt -y install apt-transport-https
                                                             sudo apt update
                                                             sudo apt -y install dotnet-sdk-2.2
-                                                        elif [ "$osR" == "19.04" ]; then
-                                                            printf "\nUsing: $os $osR, Installing .NET SDK now...\n\n"
-                                                            cd /tmp
-                                                            wget -q https://packages.microsoft.com/config/ubuntu/19.04/packages-microsoft-prod.deb
-                                                            sudo dpkg -i packages-microsoft-prod.deb
-                                                            sudo apt -y install apt-transport-https
-                                                            sudo apt update
-                                                            sudo apt -y install dotnet-sdk-2.2
-                                                            if [ ! -x "$(command -v dotnet --list-sdks)" ]; then
-                                                                printf "\nThere may have been an error while installing. Attempting alternative method...\n\n"
-                                                                cd /tmp
-                                                                sudo dpkg --purge packages-microsoft-prod && sudo dpkg -i packages-microsoft-prod.deb
-                                                                sudo apt update
-                                                                sudo apt -y install dotnet-sdk-2.2
-                                                                if [ ! -x "$(command -v dotnet --list-sdks)" ]; then
-                                                                    printf "\nThere may have been another error while installing dotnet.\n\nAttempting final alternative installation method provided by Microsoft...\n\n"
-                                                                    cd /tmp
-                                                                    sudo apt -y install gpg
-                                                                    wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.asc.gpg
-                                                                    sudo mv microsoft.asc.gpg /etc/apt/trusted.gpg.d/
-                                                                    wget -q https://packages.microsoft.com/config/ubuntu/19.04/prod.list
-                                                                    sudo mv prod.list /etc/apt/sources.list.d/microsoft-prod.list
-                                                                    sudo chown root:root /etc/apt/trusted.gpg.d/microsoft.asc.gpg
-                                                                    sudo chown root:root /etc/apt/sources.list.d/microsoft-prod.list
-                                                                    sudo apt -y install apt-transport-https
-                                                                    sudo apt update
-                                                                    sudo apt -y install dotnet-sdk-2.2
-                                                                    if [ ! -x "$(command -v dotnet --list-sdks)" ]; then
-                                                                        printf "\nIt appears dotnet is not installing properly.\n\nPlease review: https://dotnet.microsoft.com/download/linux-package-manager/ubuntu19-04/sdk-current\n\nPlease attempt installing dotnet manually using the information provided. Verify installation with 'dotnet --list-sdks' before running this script again.\n\nExiting.\n\n"
-                                                                        exit 1
-                                                                    fi
-                                                                fi
-                                                            fi
                                                         else
                                                             printf "\nYou may not be running the proper Ubuntu release.\n\nPlease verify it's able to run this.\n\n"
                                                             exit 1
@@ -1605,25 +960,6 @@ EOS
                                                         sudo rpm -Uvh https://packages.microsoft.com/config/rhel/7/packages-microsoft-prod.rpm
                                                         sudo yum update
                                                         sudo yum install dotnet-sdk-2.2
-                                                    elif [ "$os" == "Fedora" ]; then
-                                                        if [ "$osR" == "27" ]; then
-                                                            printf "\nUsing: $os $osR, Installing .NET SDK now...\n\n"
-                                                            sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
-                                                            cd /tmp
-                                                            sudo wget -q -O /etc/yum.repos.d/microsoft-prod.repo https://packages.microsoft.com/config/fedora/27/prod.repo
-                                                            sudo dnf -y update
-                                                            sudo dnf -y install dotnet-sdk-2.2
-                                                        elif [ "$osR" == "28" ]; then
-                                                            printf "\nUsing: $os $osR, Installing .NET SDK now...\n\n"
-                                                            sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
-                                                            cd /tmp
-                                                            sudo wget -q -O /etc/yum.repos.d/microsoft-prod.repo https://packages.microsoft.com/config/fedora/27/prod.repo
-                                                            sudo dnf -y update
-                                                            sudo dnf -y install dotnet-sdk-2.2
-                                                        else
-                                                            printf "\nYou may not be running the proper Fedora release.\n\nPlease verify it's able to run this.\n\n"
-                                                            exit 1
-                                                        fi
                                                     else
                                                         printf "\nYou may not be running a proper environment for this script.\n\nPlease verify before running again.\n\n"
                                                         exit 1
@@ -1647,41 +983,17 @@ EOS
                                                 ;;
                                             "Install .NET on ARM device")
                                                 dotnetArm(){
-                                                    choices=("Ubuntu" "Debian" "CentOS" "Fedora" "Go Back")
+                                                    choices=("Ubuntu" "Debian" "CentOS" "Go Back")
                                                     select opt in "${choices[@]}"
                                                     do
                                                         case $opt in
                                                             "Ubuntu")
                                                                 releases(){
-                                                                    choices=("16.04" "18.04/18.10" "19.04" "Go Back")
+                                                                    choices=("18.04" "Go Back")
                                                                     select opt in "${choices[@]}"
                                                                     do
                                                                         case $opt in
-                                                                            "16.04")
-                                                                                cat <<EOS > dotnet.sh
-#!/usr/bin/env bash
-
-printf "\nInstalling .NET Runtime now...\n\n"
-cd /tmp
-wget -q https://packages.microsoft.com/config/ubuntu/16.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
-sudo dpkg -i packages-microsoft-prod.deb
-sudo apt -y install apt-transport-https
-sudo apt update
-sudo apt -y install aspnetcore-runtime-2.2
-EOS
-                                                                                chmod +x dotnet.sh
-                                                                                printf "\nSending script to ARM device.\n\n"
-                                                                                rsync -ahP dotnet.sh $username@$ipAddr:/home/$username
-                                                                                printf "\nLaunching script to install .NET runtime.\n\n"
-                                                                                ssh $username@$ipAddr "bash -s" < dotnet.sh
-                                                                                printf "\nRemoving script that was created and used...\n\n"
-                                                                                ssh $username@$ipAddr "rm -rf ~/dotnet.sh"
-                                                                                rm -rf dotnet.sh
-                                                                                printf "\nReturning to prior Menu.\n\n"
-                                                                                clear
-                                                                                instArm
-                                                                                ;;
-                                                                            "18.04/18.10")
+                                                                            "18.04")
                                                                                 cat <<EOS > dotnet.sh
 #!/usr/bin/env bash
 
@@ -1727,58 +1039,6 @@ EOS
                                                                                 ssh $username@$ipAddr "rm -rf ~/dotnet.sh"
                                                                                 rm -rf dotnet.sh
                                                                                 printf "\nReturning to prior Menu.\n\n"
-                                                                                clear
-                                                                                instArm
-                                                                                ;;
-                                                                            "19.04")
-                                                                                cat <<EOS > dotnet.sh
-#!/usr/bin/env bash
-
-printf "\nInstalling .NET Runtime now...\n\n"
-cd /tmp
-wget -q https://packages.microsoft.com/config/ubuntu/19.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
-sudo dpkg -i packages-microsoft-prod.deb
-sudo apt -y install apt-transport-https
-sudo apt update
-sudo apt -y install aspnetcore-runtime-2.2
-if [ ! -x "$(command -v dotnet --list-sdks)" ]; then
-    printf "\n.NET runtime may not have installed properly.\n\nAttempting alternative method...\n\n"
-    cd /tmp
-    sudo dpkg --purge packages-microsoft-prod && sudo dpkg -i packages-microsoft-prod.deb
-    sudo apt update
-    sudo apt -y install aspnetcore-runtime-2.2
-    if [ ! -x "$(command -v dotnet --list-sdks)" ]; then
-        printf "\n.NET runtime may still be having issues installing.\n\nAttempting final alternative method provided by Microsoft.\n\n"
-        cd /tmp
-        sudo apt -y install -y gpg
-        wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.asc.gpg
-        sudo mv microsoft.asc.gpg /etc/apt/trusted.gpg.d/
-        wget -q https://packages.microsoft.com/config/ubuntu/19.04/prod.list
-        sudo mv prod.list /etc/apt/sources.list.d/microsoft-prod.list
-        sudo chown root:root /etc/apt/trusted.gpg.d/microsoft.asc.gpg
-        sudo chown root:root /etc/apt/sources.list.d/microsoft-prod.list
-        sudo apt -y install apt-transport-https
-        sudo apt update
-        sudo apt -y install aspnetcore-runtime-2.2
-        if [ ! -x "$(command -v dotnet --list-sdks)" ]; then
-            printf "\nFor some reason .NET runtime failed to install.\n\nPlease verify on the ARM device using: dotnet --list-sdks"
-        fi
-    fi
-fi
-EOS
-                                                                                chmod +x dotnet.sh
-                                                                                printf "\nSending script to ARM device.\n\n"
-                                                                                rsync -ahP dotnet.sh $username@$ipAddr:/home/$username
-                                                                                printf "\nLaunching script to install .NET runtime.\n\n"
-                                                                                ssh $username@$ipAddr "bash -s" < dotnet.sh
-                                                                                printf "\nRemoving script that was created and used...\n\n"
-                                                                                ssh $username@$ipAddr "rm -rf ~/dotnet.sh"
-                                                                                rm -rf dotnet.sh
-                                                                                printf "\nReturning to prior Menu.\n\n"
-                                                                                clear
-                                                                                instArm
-                                                                                ;;
-                                                                            "Go Back")
                                                                                 clear
                                                                                 instArm
                                                                                 ;;
@@ -1837,69 +1097,6 @@ EOS
                                                                 printf "\nReturning to prior Menu.\n\n"
                                                                 clear
                                                                 instArm
-                                                                ;;
-                                                            "Fedora")
-                                                                releases(){
-                                                                    choices=("27" "28" "Go Back")
-                                                                    select opt in "${choices[@]}"
-                                                                    do
-                                                                        case $opt in
-                                                                            "27")
-                                                                                cat <<EOS > dotnet.sh
-#!/usr/bin/env bash
-
-printf "\nInstalling .NET Runtime now...\n\n"
-sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
-cd /tmp
-sudo wget -q -O /etc/yum.repos.d/microsoft-prod.repo https://packages.microsoft.com/config/fedora/27/prod.repo
-sudo dnf -y update
-sudo dnf -y install aspnetcore-runtime-2.2
-EOS
-                                                                                chmod +x dotnet.sh
-                                                                                printf "\nSending script to ARM device.\n\n"
-                                                                                rsync -ahP dotnet.sh $username@$ipAddr:/home/$username
-                                                                                printf "\nLaunching script to install .NET runtime.\n\n"
-                                                                                ssh $username@$ipAddr "bash -s" < dotnet.sh
-                                                                                printf "\nRemoving script that was created and used...\n\n"
-                                                                                ssh $username@$ipAddr "rm -rf ~/dotnet.sh"
-                                                                                rm -rf dotnet.sh
-                                                                                printf "\nReturning to prior Menu.\n\n"
-                                                                                clear
-                                                                                instArm
-                                                                                ;;
-                                                                            "28")
-                                                                                cat <<EOS > dotnet.sh
-#!/usr/bin/env bash
-
-printf "\nInstalling .NET Runtime now...\n\n"
-sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
-cd /tmp
-sudo wget -q -O /etc/yum.repos.d/microsoft-prod.repo https://packages.microsoft.com/config/fedora/27/prod.repo
-sudo dnf -y update
-sudo dnf -y install aspnetcore-runtime-2.2
-EOS
-                                                                                chmod +x dotnet.sh
-                                                                                printf "\nSending script to ARM device.\n\n"
-                                                                                rsync -ahP dotnet.sh $username@$ipAddr:/home/$username
-                                                                                printf "\nLaunching script to install .NET runtime.\n\n"
-                                                                                ssh $username@$ipAddr "bash -s" < dotnet.sh
-                                                                                printf "\nRemoving script that was created and used...\n\n"
-                                                                                ssh $username@$ipAddr "rm -rf ~/dotnet.sh"
-                                                                                rm -rf dotnet.sh
-                                                                                printf "\nReturning to prior Menu.\n\n"
-                                                                                clear
-                                                                                instArm
-                                                                                ;;
-                                                                            "Go Back")
-                                                                                clear
-                                                                                dotnetArm
-                                                                                ;;
-                                                                            *) printf "\nInvalid option: $REPLY\n\nPlease try another option, ";;
-                                                                        esac
-                                                                    done
-                                                                }
-                                                                clear
-                                                                releases
                                                                 ;;
                                                             "Go Back")
                                                                 clear
@@ -1962,53 +1159,10 @@ EOS
                             "Setup x42node.service Only")
                                 osChoice(){
                                     printf "\n     ARM x42node.service Setup (ONLY creates service file)     \n\nWhich OS is your ARM device using?\n\n"
-                                    choices=("Fedora" "Ubuntu/Debian" "CentOS" "Go Back")
+                                    choices=("Ubuntu/Debian" "CentOS" "Go Back")
                                     select opt in "${choices[@]}"
                                     do
                                         case $opt in
-                                            "Fedora")
-                                                cat <<EOS > x42node-service.sh
-#!/usr/bin/env bash
-
-printf "\nCreating x42node.service.\n\n"
-sudo touch /etc/systemd/system/x42node.service
-sudo -s <<SUDO
-cat <<EOF > /etc/systemd/system/x42node.service
-[Unit]
-Description=x42 Node
-[Service]
-WorkingDirectory=/home/$username/x42node
-ExecStart=/usr/bin/dotnet /home/$username/x42node/x42.x42D.dll
-Restart=always
-# Restart service after 10 seconds if the dotnet service crashes:
-RestartSec=10
-SyslogIdentifier=x42node
-User=$username
-Environment=ASPNETCORE_ENVIRONMENT=Development
-[Install]
-WantedBy=multi-user.target
-EOF
-SUDO
-sudo systemctl daemon-reload
-if [ -e "/etc/systemd/system/x42node.service" ]; then
-    printf "\nFinished setup of: x42node.service.\n\n"
-else
-    printf "\nx42node.service creation failed.\n\nExiting script.\n\n"
-    exit 1
-fi
-EOS
-                                                chmod +x x42node-service.sh
-                                                printf "\nSending script to ARM device.\n\n"
-                                                rsync -ahP x42node-service.sh $username@$ipAddr:/home/$username
-                                                printf "\nLaunching script to setup x42node.service\n\n"
-                                                ssh $username@$ipAddr "bash -s" < x42node-service.sh
-                                                printf "\nRemoving script that was created and used...\n\n"
-                                                ssh $username@$ipAddr "rm -rf ~/x42node-service.sh"
-                                                rm -rf x42node-service.sh
-                                                printf "\nReturning to prior Menu.\n\n"
-                                                clear
-                                                instArm
-                                                ;;
                                             "Ubuntu/Debian")
                                                 cat <<EOS > x42node-service.sh
 #!/usr/bin/env bash

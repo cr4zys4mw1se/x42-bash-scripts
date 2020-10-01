@@ -26,15 +26,6 @@ ___
 
 `update-arm.sh`- Similar to `update.sh`, it will detect if the X42-FullNode folder is available or not and builds the x42node. Prompts for the ARM device __*username*__ and the __*ip*__. Then will ssh to the device, stops the `x42node.service` and removes the existing x42node folder. Transfers the new x42node folder and starts `x42node.service`.
 ___
-# Changes That May Occur:
-  * Removal of Ubuntu 16.04
-  * Removal of Ubuntu 19.04
-  * Addition of Ubuntu 20.04
-  * Removal of Fedora 27 and 28
-  * *Potential* Addition of Fedora 31 and 32
-  * Standard Readme.txt file
-  * Additional changes may occur as well
-___
 # Contents:
    * [Setup](#setup)
    * [Edits Required](#edits-required)
