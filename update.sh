@@ -38,9 +38,9 @@ if [ ! -d "/home/$USER/X42-FullNode" ]; then
     dotnet build --configuration Release
     if [ ! -d "/home/$USER/x42node" ]; then
         mkdir ~/x42node
-        mv x42.x42D/bin/Release/netcoreapp2.1 ~/x42node
+        mv x42.x42D/bin/Release/netcoreapp3.1 ~/x42node
     else
-        mv -f x42.x42D/bin/Release/netcoreapp2.1 ~/x42node
+        mv -f x42.x42D/bin/Release/netcoreapp3.1 ~/x42node
     fi
     printf "\nStarting x42node.service\n\n"
     sudo systemctl start x42node.service
@@ -62,9 +62,9 @@ else
     dotnet build --configuration Release
     if [ ! -d "/home/$USER/x42node" ]; then
         mkdir ~/x42node
-        mv x42.x42D/bin/Release/netcoreapp2.1 ~/x42node
+        mv x42.x42D/bin/Release/netcoreapp3.1 ~/x42node
     else
-        mv -f x42.x42D/bin/Release/netcoreapp2.1 ~/x42node
+        mv -f x42.x42D/bin/Release/netcoreapp3.1 ~/x42node
     fi
     printf "\nStarting x42node.service\n\n"
     sudo systemctl start x42node.service
