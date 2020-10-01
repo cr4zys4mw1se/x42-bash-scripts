@@ -76,6 +76,14 @@ mainMenu(){
                                             sudo apt -y install apt-transport-https
                                             sudo apt update
                                             sudo apt -y install dotnet-sdk-2.2
+                                        elif [ "$osR" == "20.04" ]; then
+                                            printf "\nUsing: $os $osR\n\n.NET SDK not installed\n\nInstalling now...\n\n"
+                                            cd /tmp
+                                            wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+                                            sudo dpkg -i packages-microsoft-prod.deb
+                                            sudo apt-get install -y apt-transport-https
+                                            sudo apt-get update
+                                            sudo apt-get install -y dotnet-sdk-3.1
                                         else
                                             printf "\nYou may not be running the proper Ubuntu release.\n\nPlease verify it's able to run this.\n\n"
                                             exit 1
@@ -192,6 +200,14 @@ EOF
                                             sudo apt -y install apt-transport-https
                                             sudo apt update
                                             sudo apt -y install dotnet-sdk-2.2
+                                        elif [ "$osR" == "20.04" ]; then
+                                            printf "\nUsing: $os $osR\n\n.NET SDK not installed\n\nInstalling now...\n\n"
+                                            cd /tmp
+                                            wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+                                            sudo dpkg -i packages-microsoft-prod.deb
+                                            sudo apt-get install -y apt-transport-https
+                                            sudo apt-get update
+                                            sudo apt-get install -y dotnet-sdk-3.1
                                         else
                                             printf "\nYou may not be running the proper Ubuntu release.\n\nPlease verify it's able to run this.\n\n"
                                             exit 1
@@ -454,6 +470,14 @@ EOF
                                             sudo apt -y install apt-transport-https
                                             sudo apt update
                                             sudo apt -y install dotnet-sdk-2.2
+                                        elif [ "$osR" == "20.04" ]; then
+                                            printf "\nUsing: $os $osR\n\n.NET SDK not installed\n\nInstalling now...\n\n"
+                                            cd /tmp
+                                            wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+                                            sudo dpkg -i packages-microsoft-prod.deb
+                                            sudo apt-get install -y apt-transport-https
+                                            sudo apt-get update
+                                            sudo apt-get install -y dotnet-sdk-3.1
                                         else
                                             printf "\nYou may not be running the proper Ubuntu release.\n\nPlease verify it's able to run this.\n\n"
                                             exit 1
@@ -484,7 +508,7 @@ EOF
                                                     case $opt in
                                                         "Ubuntu")
                                                             releases(){
-                                                                choices=("18.04")
+                                                                choices=("18.04" "20.04")
                                                                 select opt in "${choices[@]}"
                                                                 do
                                                                     case $opt in
@@ -518,6 +542,55 @@ if [ ! -x "$(command -v dotnet --list-sdks)" ]; then
         sudo apt -y install -y apt-transport-https
         sudo apt update
         sudo apt -y install aspnetcore-runtime-2.2
+        if [ ! -x "$(command -v dotnet --list-sdks)" ]; then
+            printf "\nFor some reason .NET runtime failed to install.\n\nPlease verify on the ARM device using: dotnet --list-sdks"
+        fi
+    fi
+fi
+EOS
+                                                                            chmod +x dotnet.sh
+                                                                            printf "\nSending script to ARM device.\n\n"
+                                                                            rsync -ahP dotnet.sh $username@$ipAddr:/home/$username
+                                                                            printf "\nLaunching script to install .NET runtime.\n\n"
+                                                                            ssh $username@$ipAddr "bash -s" < dotnet.sh
+                                                                            printf "\nRemoving script that was created and used...\n\n"
+                                                                            ssh $username@$ipAddr "rm -rf ~/dotnet.sh"
+                                                                            rm -rf dotnet.sh
+                                                                            break
+                                                                            ;;
+                                                                        "20.04")
+                                                                            cat <<EOS > dotnet.sh
+#!/usr/bin/env bash
+
+printf "\nInstalling .NET Runtime now...\n\n"
+cd /tmp
+wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+sudo dpkg -i packages-microsoft-prod.deb
+sudo apt-get install -y apt-transport-https
+sudo apt update
+sudo apt-get install -y dotnet-sdk-3.1
+if [ ! -x "$(command -v dotnet --list-sdks)" ]; then
+    printf "\n.NET runtime may not have installed properly.\n\nAttempting alternative method...\n\n"
+    cd /tmp
+    sudo dpkg --purge packages-microsoft-prod && sudo dpkg -i packages-microsoft-prod.deb
+    sudo apt update
+    sudo apt -y install aspnetcore-runtime-3.1
+    if [ ! -x "$(command -v dotnet --list-sdks)" ]; then
+        printf "\n.NET runtime may still be having issues installing.\n\nAttempting final alternative method provided by Microsoft.\n\n"
+        cd /tmp
+        sudo dpkg --purge packages-microsoft-prod && sudo dpkg -i packages-microsoft-prod.deb
+        sudo apt-get update
+        sudo apt-get install -y gpg
+        wget -O - https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor -o microsoft.asc.gpg
+        sudo mv microsoft.asc.gpg /etc/apt/trusted.gpg.d/
+        wget https://packages.microsoft.com/config/ubuntu/{os-version}/prod.list
+        sudo mv prod.list /etc/apt/sources.list.d/microsoft-prod.list
+        sudo chown root:root /etc/apt/trusted.gpg.d/microsoft.asc.gpg
+        sudo chown root:root /etc/apt/sources.list.d/microsoft-prod.list
+        sudo apt-get update
+        sudo apt-get install -y apt-transport-https
+        sudo apt-get update
+        sudo apt-get install -y {dotnet-package}
         if [ ! -x "$(command -v dotnet --list-sdks)" ]; then
             printf "\nFor some reason .NET runtime failed to install.\n\nPlease verify on the ARM device using: dotnet --list-sdks"
         fi
@@ -768,6 +841,14 @@ EOS
                                                             sudo apt -y install apt-transport-https
                                                             sudo apt update
                                                             sudo apt -y install dotnet-sdk-2.2
+                                                        elif [ "$osR" == "20.04" ]; then
+                                                            printf "\nUsing: $os $osR\n\n.NET SDK not installed\n\nInstalling now...\n\n"
+                                                            cd /tmp
+                                                            wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+                                                            sudo dpkg -i packages-microsoft-prod.deb
+                                                            sudo apt-get install -y apt-transport-https
+                                                            sudo apt-get update
+                                                            sudo apt-get install -y dotnet-sdk-3.1
                                                         else
                                                             printf "\nYou may not be running the proper Ubuntu release.\n\nPlease verify it's able to run this.\n\n"
                                                             exit 1
@@ -801,7 +882,7 @@ EOS
                                                         case $opt in
                                                             "Ubuntu")
                                                                 releases(){
-                                                                    choices=("18.04" "Go Back")
+                                                                    choices=("18.04" "20.04" "Go Back")
                                                                     select opt in "${choices[@]}"
                                                                     do
                                                                         case $opt in
@@ -836,6 +917,57 @@ if [ ! -x "$(command -v dotnet --list-sdks)" ]; then
         sudo apt -y install -y apt-transport-https
         sudo apt update
         sudo apt -y install aspnetcore-runtime-2.2
+        if [ ! -x "$(command -v dotnet --list-sdks)" ]; then
+            printf "\nFor some reason .NET runtime failed to install.\n\nPlease verify on the ARM device using: dotnet --list-sdks"
+        fi
+    fi
+fi
+EOS
+                                                                                chmod +x dotnet.sh
+                                                                                printf "\nSending script to ARM device.\n\n"
+                                                                                rsync -ahP dotnet.sh $username@$ipAddr:/home/$username
+                                                                                printf "\nLaunching script to install .NET runtime.\n\n"
+                                                                                ssh $username@$ipAddr "bash -s" < dotnet.sh
+                                                                                printf "\nRemoving script that was created and used...\n\n"
+                                                                                ssh $username@$ipAddr "rm -rf ~/dotnet.sh"
+                                                                                rm -rf dotnet.sh
+                                                                                printf "\nReturning to prior Menu.\n\n"
+                                                                                clear
+                                                                                instArm
+                                                                                ;;
+                                                                            "20.04")
+                                                                                cat <<EOS > dotnet.sh
+#!/usr/bin/env bash
+
+printf "\nInstalling .NET Runtime now...\n\n"
+cd /tmp
+wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+sudo dpkg -i packages-microsoft-prod.deb
+sudo apt-get install -y apt-transport-https
+sudo apt update
+sudo apt-get install -y dotnet-sdk-3.1
+if [ ! -x "$(command -v dotnet --list-sdks)" ]; then
+    printf "\n.NET runtime may not have installed properly.\n\nAttempting alternative method...\n\n"
+    cd /tmp
+    sudo dpkg --purge packages-microsoft-prod && sudo dpkg -i packages-microsoft-prod.deb
+    sudo apt update
+    sudo apt -y install aspnetcore-runtime-3.1
+    if [ ! -x "$(command -v dotnet --list-sdks)" ]; then
+        printf "\n.NET runtime may still be having issues installing.\n\nAttempting final alternative method provided by Microsoft.\n\n"
+        cd /tmp
+        sudo dpkg --purge packages-microsoft-prod && sudo dpkg -i packages-microsoft-prod.deb
+        sudo apt-get update
+        sudo apt-get install -y gpg
+        wget -O - https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor -o microsoft.asc.gpg
+        sudo mv microsoft.asc.gpg /etc/apt/trusted.gpg.d/
+        wget https://packages.microsoft.com/config/ubuntu/{os-version}/prod.list
+        sudo mv prod.list /etc/apt/sources.list.d/microsoft-prod.list
+        sudo chown root:root /etc/apt/trusted.gpg.d/microsoft.asc.gpg
+        sudo chown root:root /etc/apt/sources.list.d/microsoft-prod.list
+        sudo apt-get update
+        sudo apt-get install -y apt-transport-https
+        sudo apt-get update
+        sudo apt-get install -y {dotnet-package}
         if [ ! -x "$(command -v dotnet --list-sdks)" ]; then
             printf "\nFor some reason .NET runtime failed to install.\n\nPlease verify on the ARM device using: dotnet --list-sdks"
         fi
@@ -951,6 +1083,14 @@ EOS
                                                             sudo apt -y install apt-transport-https
                                                             sudo apt update
                                                             sudo apt -y install dotnet-sdk-2.2
+                                                        elif [ "$osR" == "20.04" ]; then
+                                                            printf "\nUsing: $os $osR\n\n.NET SDK not installed\n\nInstalling now...\n\n"
+                                                            cd /tmp
+                                                            wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+                                                            sudo dpkg -i packages-microsoft-prod.deb
+                                                            sudo apt-get install -y apt-transport-https
+                                                            sudo apt-get update
+                                                            sudo apt-get install -y dotnet-sdk-3.1
                                                         else
                                                             printf "\nYou may not be running the proper Ubuntu release.\n\nPlease verify it's able to run this.\n\n"
                                                             exit 1
@@ -989,7 +1129,7 @@ EOS
                                                         case $opt in
                                                             "Ubuntu")
                                                                 releases(){
-                                                                    choices=("18.04" "Go Back")
+                                                                    choices=("18.04" "20.04" "Go Back")
                                                                     select opt in "${choices[@]}"
                                                                     do
                                                                         case $opt in
@@ -1024,6 +1164,57 @@ if [ ! -x "$(command -v dotnet --list-sdks)" ]; then
         sudo apt -y install -y apt-transport-https
         sudo apt update
         sudo apt -y install aspnetcore-runtime-2.2
+        if [ ! -x "$(command -v dotnet --list-sdks)" ]; then
+            printf "\nFor some reason .NET runtime failed to install.\n\nPlease verify on the ARM device using: dotnet --list-sdks"
+        fi
+    fi
+fi
+EOS
+                                                                                chmod +x dotnet.sh
+                                                                                printf "\nSending script to ARM device.\n\n"
+                                                                                rsync -ahP dotnet.sh $username@$ipAddr:/home/$username
+                                                                                printf "\nLaunching script to install .NET runtime.\n\n"
+                                                                                ssh $username@$ipAddr "bash -s" < dotnet.sh
+                                                                                printf "\nRemoving script that was created and used...\n\n"
+                                                                                ssh $username@$ipAddr "rm -rf ~/dotnet.sh"
+                                                                                rm -rf dotnet.sh
+                                                                                printf "\nReturning to prior Menu.\n\n"
+                                                                                clear
+                                                                                instArm
+                                                                                ;;
+                                                                            "20.04")
+                                                                                cat <<EOS > dotnet.sh
+#!/usr/bin/env bash
+
+printf "\nInstalling .NET Runtime now...\n\n"
+cd /tmp
+wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+sudo dpkg -i packages-microsoft-prod.deb
+sudo apt-get install -y apt-transport-https
+sudo apt update
+sudo apt-get install -y dotnet-sdk-3.1
+if [ ! -x "$(command -v dotnet --list-sdks)" ]; then
+    printf "\n.NET runtime may not have installed properly.\n\nAttempting alternative method...\n\n"
+    cd /tmp
+    sudo dpkg --purge packages-microsoft-prod && sudo dpkg -i packages-microsoft-prod.deb
+    sudo apt update
+    sudo apt -y install aspnetcore-runtime-3.1
+    if [ ! -x "$(command -v dotnet --list-sdks)" ]; then
+        printf "\n.NET runtime may still be having issues installing.\n\nAttempting final alternative method provided by Microsoft.\n\n"
+        cd /tmp
+        sudo dpkg --purge packages-microsoft-prod && sudo dpkg -i packages-microsoft-prod.deb
+        sudo apt-get update
+        sudo apt-get install -y gpg
+        wget -O - https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor -o microsoft.asc.gpg
+        sudo mv microsoft.asc.gpg /etc/apt/trusted.gpg.d/
+        wget https://packages.microsoft.com/config/ubuntu/{os-version}/prod.list
+        sudo mv prod.list /etc/apt/sources.list.d/microsoft-prod.list
+        sudo chown root:root /etc/apt/trusted.gpg.d/microsoft.asc.gpg
+        sudo chown root:root /etc/apt/sources.list.d/microsoft-prod.list
+        sudo apt-get update
+        sudo apt-get install -y apt-transport-https
+        sudo apt-get update
+        sudo apt-get install -y {dotnet-package}
         if [ ! -x "$(command -v dotnet --list-sdks)" ]; then
             printf "\nFor some reason .NET runtime failed to install.\n\nPlease verify on the ARM device using: dotnet --list-sdks"
         fi

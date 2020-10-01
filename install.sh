@@ -39,6 +39,14 @@ if [ -x "$(command -v apt -v)" ]; then
             sudo apt -y install apt-transport-https
             sudo apt update
             sudo apt -y install dotnet-sdk-2.2
+        elif [ "$osR" == "20.04" ]; then
+            printf "\nUsing: $os $osR\n\n.NET SDK not installed\n\nInstalling now...\n\n"
+            cd /tmp
+            wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+            sudo dpkg -i packages-microsoft-prod.deb
+            sudo apt-get install -y apt-transport-https
+            sudo apt-get update
+            sudo apt-get install -y dotnet-sdk-3.1
         else
             printf "You may not be on a correct Linux version.\n\nPlease try again later.\n\n"
             exit 1
