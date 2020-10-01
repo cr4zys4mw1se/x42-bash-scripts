@@ -61,7 +61,7 @@ mainMenu(){
                                             sudo chown root:root /etc/apt/sources.list.d/microsoft-prod.list
                                             sudo apt -y install apt-transport-https
                                             sudo apt update
-                                            sudo apt -y install dotnet-sdk-2.2
+                                            sudo apt -y install dotnet-sdk-3.1
                                         else
                                             printf "\nUnfortunately you don't appear to be running a proper Debian release.\n\n"
                                             exit 1
@@ -75,7 +75,7 @@ mainMenu(){
                                             sudo add-apt-repository universe
                                             sudo apt -y install apt-transport-https
                                             sudo apt update
-                                            sudo apt -y install dotnet-sdk-2.2
+                                            sudo apt -y install dotnet-sdk-3.1
                                         elif [ "$osR" == "20.04" ]; then
                                             printf "\nUsing: $os $osR\n\n.NET SDK not installed\n\nInstalling now...\n\n"
                                             cd /tmp
@@ -92,7 +92,7 @@ mainMenu(){
                                         printf "\nUsing: $os $osR\n\n.NET SDK not installed\n\nInstalling now...\n\n"
                                         sudo rpm -Uvh https://packages.microsoft.com/config/rhel/7/packages-microsoft-prod.rpm
                                         sudo yum -y update
-                                        sudo yum -y install dotnet-sdk-2.2
+                                        sudo yum -y install dotnet-sdk-3.1
                                     else
                                         printf "\nYou may not be running a proper environment for this script.\n\nPlease verify before running again.\n\n"
                                         exit 1
@@ -118,7 +118,7 @@ mainMenu(){
                                         dotnet restore
                                         dotnet build --configuration Release
                                         mkdir ~/x42node
-                                        mv x42.x42D/bin/Release/netcoreapp2.1/*.* ~/x42node
+                                        mv x42.x42D/bin/Release/netcoreapp3.1/*.* ~/x42node
                                     else
                                         printf "X42-FullNode found, checking for updates before building...\n\n"
                                         cd ~/X42-FullNode
@@ -129,9 +129,9 @@ mainMenu(){
                                         dotnet build --configuration Release
                                         if [ ! -d "/home/$USER/x42node" ]; then
                                             mkdir ~/x42node
-                                            mv x42.x42D/bin/Release/netcoreapp2.1/*.* ~/x42node
+                                            mv x42.x42D/bin/Release/netcoreapp3.1/*.* ~/x42node
                                         else
-                                            mv -f x42.x42D/bin/Release/netcoreapp2.1/*.* ~/x42node
+                                            mv -f x42.x42D/bin/Release/netcoreapp3.1/*.* ~/x42node
                                         fi
                                     fi
                                 fi
@@ -185,7 +185,7 @@ EOF
                                             sudo chown root:root /etc/apt/sources.list.d/microsoft-prod.list
                                             sudo apt -y install apt-transport-https
                                             sudo apt update
-                                            sudo apt -y install dotnet-sdk-2.2
+                                            sudo apt -y install dotnet-sdk-3.1
                                         else
                                             printf "\nUnfortunately you don't appear to be running a proper Debian release.\n\n"
                                             exit 1
@@ -199,7 +199,7 @@ EOF
                                             sudo add-apt-repository universe
                                             sudo apt -y install apt-transport-https
                                             sudo apt update
-                                            sudo apt -y install dotnet-sdk-2.2
+                                            sudo apt -y install dotnet-sdk-3.1
                                         elif [ "$osR" == "20.04" ]; then
                                             printf "\nUsing: $os $osR\n\n.NET SDK not installed\n\nInstalling now...\n\n"
                                             cd /tmp
@@ -216,7 +216,7 @@ EOF
                                         printf "\nUsing: $os $osR\n\n.NET SDK not installed\n\nInstalling now...\n\n"
                                         sudo rpm -Uvh https://packages.microsoft.com/config/rhel/7/packages-microsoft-prod.rpm
                                         sudo yum -y update
-                                        sudo yum -y install dotnet-sdk-2.2
+                                        sudo yum -y install dotnet-sdk-3.1
                                     else
                                         printf "\nYou may not be running a proper environment for this script.\n\nPlease verify before running again.\n\n"
                                         exit 1
@@ -256,9 +256,9 @@ EOF
                                         dotnet build --configuration Release
                                         if [ ! -d "/home/$USER/x42node" ]; then
                                             mkdir ~/x42node
-                                            mv x42.x42D/bin/Release/netcoreapp2.1/*.* ~/x42node
+                                            mv x42.x42D/bin/Release/netcoreapp3.1/*.* ~/x42node
                                         else
-                                            mv -f x42.x42D/bin/Release/netcoreapp2.1/*.* ~/x42node
+                                            mv -f x42.x42D/bin/Release/netcoreapp3.1/*.* ~/x42node
                                         fi
                                     else
                                         printf "X42-FullNode found, checking for updates before building...\n\n"
@@ -270,9 +270,9 @@ EOF
                                         dotnet build --configuration Release
                                         if [ ! -d "/home/$USER/x42node" ]; then
                                             mkdir ~/x42node
-                                            mv x42.x42D/bin/Release/netcoreapp2.1/*.* ~/x42node
+                                            mv x42.x42D/bin/Release/netcoreapp3.1/*.* ~/x42node
                                         else
-                                            mv -f x42.x42D/bin/Release/netcoreapp2.1/*.* ~/x42node
+                                            mv -f x42.x42D/bin/Release/netcoreapp3.1/*.* ~/x42node
                                         fi
                                     fi
                                 fi
@@ -342,9 +342,9 @@ EOF
                                     dotnet build --configuration Release
                                     if [ ! -d "/home/$USER/x42node" ]; then
                                         mkdir ~/x42node
-                                        mv x42.x42D/bin/Release/netcoreapp2.1/*.* ~/x42node
+                                        mv x42.x42D/bin/Release/netcoreapp3.1/*.* ~/x42node
                                     else
-                                        mv -f x42.x42D/bin/Release/netcoreapp2.1/*.* ~/x42node
+                                        mv -f x42.x42D/bin/Release/netcoreapp3.1/*.* ~/x42node
                                     fi
                                     printf "\nStarting x42node.service\n\n"
                                     sudo systemctl start x42node.service
@@ -367,9 +367,9 @@ EOF
                                     dotnet build --configuration Release
                                     if [ ! -d "/home/$USER/x42node" ]; then
                                         mkdir ~/x42node
-                                        mv x42.x42D/bin/Release/netcoreapp2.1/*.* ~/x42node
+                                        mv x42.x42D/bin/Release/netcoreapp3.1/*.* ~/x42node
                                     else
-                                        mv -f x42.x42D/bin/Release/netcoreapp2.1/*.* ~/x42node
+                                        mv -f x42.x42D/bin/Release/netcoreapp3.1/*.* ~/x42node
                                     fi
                                     printf "\nStarting x42node.service\n\n"
                                     sudo systemctl start x42node.service
@@ -396,9 +396,9 @@ EOF
                                     dotnet build --configuration Release
                                     if [ ! -d "/home/$USER/x42node" ]; then
                                         mkdir ~/x42node
-                                        mv x42.x42D/bin/Release/netcoreapp2.1/*.* ~/x42node
+                                        mv x42.x42D/bin/Release/netcoreapp3.1/*.* ~/x42node
                                     else
-                                        mv -f x42.x42D/bin/Release/netcoreapp2.1/*.* ~/x42node
+                                        mv -f x42.x42D/bin/Release/netcoreapp3.1/*.* ~/x42node
                                     fi
                                 else
                                     printf "X42-FullNode folder found.\n\nUpdating from GitHub...\n\n"
@@ -410,9 +410,9 @@ EOF
                                     dotnet build --configuration Release
                                     if [ ! -d "/home/$USER/x42node" ]; then
                                         mkdir ~/x42node
-                                        mv x42.x42D/bin/Release/netcoreapp2.1/*.* ~/x42node
+                                        mv x42.x42D/bin/Release/netcoreapp3.1/*.* ~/x42node
                                     else
-                                        mv -f x42.x42D/bin/Release/netcoreapp2.1/*.* ~/x42node
+                                        mv -f x42.x42D/bin/Release/netcoreapp3.1/*.* ~/x42node
                                     fi
                                 fi
                                 printf "\nFinished updating X42-FullNode only.\n\nReturning to prior Menu in 5s...\n\n"
@@ -455,7 +455,7 @@ EOF
                                             sudo chown root:root /etc/apt/sources.list.d/microsoft-prod.list
                                             sudo apt install apt-transport-https
                                             sudo apt update
-                                            sudo apt install dotnet-sdk-2.2
+                                            sudo apt install dotnet-sdk-3.1
                                         else
                                             printf "\nUnfortunately you don't appear to be running a proper Debian release.\n\n"
                                             exit 1
@@ -469,7 +469,7 @@ EOF
                                             sudo add-apt-repository universe
                                             sudo apt -y install apt-transport-https
                                             sudo apt update
-                                            sudo apt -y install dotnet-sdk-2.2
+                                            sudo apt -y install dotnet-sdk-3.1
                                         elif [ "$osR" == "20.04" ]; then
                                             printf "\nUsing: $os $osR\n\n.NET SDK not installed\n\nInstalling now...\n\n"
                                             cd /tmp
@@ -486,7 +486,7 @@ EOF
                                         printf "\nUsing: $os $osR, Installing .NET SDK now...\n\n"
                                         sudo rpm -Uvh https://packages.microsoft.com/config/rhel/7/packages-microsoft-prod.rpm
                                         sudo yum -y update
-                                        sudo yum -y install dotnet-sdk-2.2
+                                        sudo yum -y install dotnet-sdk-3.1
                                     fi
                                 elif [ -x "$(command -v dotnet --list-sdks)" ]; then
                                     printf "\n.NET SDK already installed.\n\nInstalling .NET runtime on ARM device...\n\n"
@@ -523,12 +523,12 @@ sudo dpkg -i packages-microsoft-prod.deb
 sudo add-apt-repository universe
 sudo apt -y install apt-transport-https
 sudo apt update
-sudo apt -y install aspnetcore-runtime-2.2
+sudo apt -y install aspnetcore-runtime-3.1
 if [ ! -x "$(command -v dotnet --list-sdks)" ]; then
     printf "\n.NET runtime may not have installed properly.\n\nAttempting alternative method...\n\n"
     sudo dpkg --purge packages-microsoft-prod && sudo dpkg -i packages-microsoft-prod.deb
     sudo apt update
-    sudo apt -y install aspnetcore-runtime-2.2
+    sudo apt -y install aspnetcore-runtime-3.1
     if [ ! -x "$(command -v dotnet --list-sdks)" ]; then
         printf "\n.NET runtime may still be having issues installing.\n\nAttempting final alternative method provided by Microsoft.\n\n"
         cd /tmp
@@ -541,7 +541,7 @@ if [ ! -x "$(command -v dotnet --list-sdks)" ]; then
         sudo chown root:root /etc/apt/sources.list.d/microsoft-prod.list
         sudo apt -y install -y apt-transport-https
         sudo apt update
-        sudo apt -y install aspnetcore-runtime-2.2
+        sudo apt -y install aspnetcore-runtime-3.1
         if [ ! -x "$(command -v dotnet --list-sdks)" ]; then
             printf "\nFor some reason .NET runtime failed to install.\n\nPlease verify on the ARM device using: dotnet --list-sdks"
         fi
@@ -629,7 +629,7 @@ sudo chown root:root /etc/apt/trusted.gpg.d/microsoft.asc.gpg
 sudo chown root:root /etc/apt/sources.list.d/microsoft-prod.list
 sudo apt-get install apt-transport-https
 sudo apt-get update
-sudo apt-get install aspnetcore-runtime-2.2
+sudo apt-get install aspnetcore-runtime-3.1
 EOS
                                                             chmod +x dotnet.sh
                                                             printf "\nSending script to ARM device.\n\n"
@@ -648,7 +648,7 @@ EOS
 printf "\nInstalling .NET Runtime now...\n\n"
 sudo rpm -Uvh https://packages.microsoft.com/config/rhel/7/packages-microsoft-prod.rpm
 sudo yum -y update
-sudo yum -y install aspnetcore-runtime-2.2
+sudo yum -y install aspnetcore-runtime-3.1
 EOS
                                                             chmod +x dotnet.sh
                                                             printf "\nSending script to ARM device.\n\n"
@@ -679,9 +679,9 @@ EOS
                                     dotnet restore
                                     dotnet publish --configuration Release
                                     if [ ! -d "/home/$USER/x42node" ]; then
-                                        mv x42.x42D/bin/Release/netcoreapp2.1/publish ~/x42node
+                                        mv x42.x42D/bin/Release/netcoreapp3.1/publish ~/x42node
                                     else
-                                        mv -f x42.x42D/bin/Release/netcoreapp2.1/publish ~/x42node
+                                        mv -f x42.x42D/bin/Release/netcoreapp3.1/publish ~/x42node
                                     fi
                                     rsync -ahP ~/x42node $username@$ipAddr:/home/$username
                                 else
@@ -693,9 +693,9 @@ EOS
                                     dotnet restore
                                     dotnet publish --configuration Release
                                     if [ ! -d "/home/$USER/x42node" ]; then
-                                        mv x42.x42D/bin/Release/netcoreapp2.1/publish ~/x42node
+                                        mv x42.x42D/bin/Release/netcoreapp3.1/publish ~/x42node
                                     else
-                                        mv -f x42.x42D/bin/Release/netcoreapp2.1/publish ~/x42node
+                                        mv -f x42.x42D/bin/Release/netcoreapp3.1/publish ~/x42node
                                     fi
                                     rsync -ahP ~/x42node $username@$ipAddr:/home/$username
                                 fi
@@ -826,7 +826,7 @@ EOS
                                                             sudo chown root:root /etc/apt/sources.list.d/microsoft-prod.list
                                                             sudo apt install apt-transport-https
                                                             sudo apt update
-                                                            sudo apt install dotnet-sdk-2.2
+                                                            sudo apt install dotnet-sdk-3.1
                                                         else
                                                             printf "\nUnfortunately you don't appear to be running a proper Debian release.\n\n"
                                                             exit 1
@@ -840,7 +840,7 @@ EOS
                                                             sudo add-apt-repository universe
                                                             sudo apt -y install apt-transport-https
                                                             sudo apt update
-                                                            sudo apt -y install dotnet-sdk-2.2
+                                                            sudo apt -y install dotnet-sdk-3.1
                                                         elif [ "$osR" == "20.04" ]; then
                                                             printf "\nUsing: $os $osR\n\n.NET SDK not installed\n\nInstalling now...\n\n"
                                                             cd /tmp
@@ -857,7 +857,7 @@ EOS
                                                         printf "\nUsing: $os $osR, Installing .NET SDK now...\n\n"
                                                         sudo rpm -Uvh https://packages.microsoft.com/config/rhel/7/packages-microsoft-prod.rpm
                                                         sudo yum -y update
-                                                        sudo yum -y install dotnet-sdk-2.2
+                                                        sudo yum -y install dotnet-sdk-3.1
                                                     else
                                                         printf "\nYou may not be running a proper environment for this script.\n\nPlease verify before running again.\n\n"
                                                         exit 1
@@ -897,13 +897,13 @@ sudo dpkg -i packages-microsoft-prod.deb
 sudo add-apt-repository universe
 sudo apt -y install apt-transport-https
 sudo apt update
-sudo apt -y install aspnetcore-runtime-2.2
+sudo apt -y install aspnetcore-runtime-3.1
 if [ ! -x "$(command -v dotnet --list-sdks)" ]; then
     printf "\n.NET runtime may not have installed properly.\n\nAttempting alternative method...\n\n"
     cd /tmp
     sudo dpkg --purge packages-microsoft-prod && sudo dpkg -i packages-microsoft-prod.deb
     sudo apt update
-    sudo apt -y install aspnetcore-runtime-2.2
+    sudo apt -y install aspnetcore-runtime-3.1
     if [ ! -x "$(command -v dotnet --list-sdks)" ]; then
         printf "\n.NET runtime may still be having issues installing.\n\nAttempting final alternative method provided by Microsoft.\n\n"
         cd /tmp
@@ -916,7 +916,7 @@ if [ ! -x "$(command -v dotnet --list-sdks)" ]; then
         sudo chown root:root /etc/apt/sources.list.d/microsoft-prod.list
         sudo apt -y install -y apt-transport-https
         sudo apt update
-        sudo apt -y install aspnetcore-runtime-2.2
+        sudo apt -y install aspnetcore-runtime-3.1
         if [ ! -x "$(command -v dotnet --list-sdks)" ]; then
             printf "\nFor some reason .NET runtime failed to install.\n\nPlease verify on the ARM device using: dotnet --list-sdks"
         fi
@@ -1007,7 +1007,7 @@ sudo chown root:root /etc/apt/trusted.gpg.d/microsoft.asc.gpg
 sudo chown root:root /etc/apt/sources.list.d/microsoft-prod.list
 sudo apt-get install apt-transport-https
 sudo apt-get update
-sudo apt-get install aspnetcore-runtime-2.2
+sudo apt-get install aspnetcore-runtime-3.1
 EOS
                                                                 chmod +x dotnet.sh
                                                                 printf "\nSending script to ARM device.\n\n"
@@ -1028,7 +1028,7 @@ EOS
 printf "\nInstalling .NET Runtime now...\n\n"
 sudo rpm -Uvh https://packages.microsoft.com/config/rhel/7/packages-microsoft-prod.rpm
 sudo yum -y update
-sudo yum -y install aspnetcore-runtime-2.2
+sudo yum -y install aspnetcore-runtime-3.1
 EOS
                                                                 chmod +x dotnet.sh
                                                                 printf "\nSending script to ARM device.\n\n"
@@ -1068,7 +1068,7 @@ EOS
                                                             sudo chown root:root /etc/apt/sources.list.d/microsoft-prod.list
                                                             sudo apt install apt-transport-https
                                                             sudo apt update
-                                                            sudo apt install dotnet-sdk-2.2
+                                                            sudo apt install dotnet-sdk-3.1
                                                         else
                                                             printf "\nUnfortunately you don't appear to be running a proper Debian release.\n\n"
                                                             exit 1
@@ -1082,7 +1082,7 @@ EOS
                                                             sudo add-apt-repository universe
                                                             sudo apt -y install apt-transport-https
                                                             sudo apt update
-                                                            sudo apt -y install dotnet-sdk-2.2
+                                                            sudo apt -y install dotnet-sdk-3.1
                                                         elif [ "$osR" == "20.04" ]; then
                                                             printf "\nUsing: $os $osR\n\n.NET SDK not installed\n\nInstalling now...\n\n"
                                                             cd /tmp
@@ -1099,7 +1099,7 @@ EOS
                                                         printf "\nUsing: $os $osR, Installing .NET SDK now...\n\n"
                                                         sudo rpm -Uvh https://packages.microsoft.com/config/rhel/7/packages-microsoft-prod.rpm
                                                         sudo yum update
-                                                        sudo yum install dotnet-sdk-2.2
+                                                        sudo yum install dotnet-sdk-3.1
                                                     else
                                                         printf "\nYou may not be running a proper environment for this script.\n\nPlease verify before running again.\n\n"
                                                         exit 1
@@ -1144,13 +1144,13 @@ sudo dpkg -i packages-microsoft-prod.deb
 sudo add-apt-repository universe
 sudo apt -y install apt-transport-https
 sudo apt update
-sudo apt -y install aspnetcore-runtime-2.2
+sudo apt -y install aspnetcore-runtime-3.1
 if [ ! -x "$(command -v dotnet --list-sdks)" ]; then
     printf "\n.NET runtime may not have installed properly.\n\nAttempting alternative method...\n\n"
     cd /tmp
     sudo dpkg --purge packages-microsoft-prod && sudo dpkg -i packages-microsoft-prod.deb
     sudo apt update
-    sudo apt -y install aspnetcore-runtime-2.2
+    sudo apt -y install aspnetcore-runtime-3.1
     if [ ! -x "$(command -v dotnet --list-sdks)" ]; then
         printf "\n.NET runtime may still be having issues installing.\n\nAttempting final alternative method provided by Microsoft.\n\n"
         cd /tmp
@@ -1163,7 +1163,7 @@ if [ ! -x "$(command -v dotnet --list-sdks)" ]; then
         sudo chown root:root /etc/apt/sources.list.d/microsoft-prod.list
         sudo apt -y install -y apt-transport-https
         sudo apt update
-        sudo apt -y install aspnetcore-runtime-2.2
+        sudo apt -y install aspnetcore-runtime-3.1
         if [ ! -x "$(command -v dotnet --list-sdks)" ]; then
             printf "\nFor some reason .NET runtime failed to install.\n\nPlease verify on the ARM device using: dotnet --list-sdks"
         fi
@@ -1254,7 +1254,7 @@ sudo chown root:root /etc/apt/trusted.gpg.d/microsoft.asc.gpg
 sudo chown root:root /etc/apt/sources.list.d/microsoft-prod.list
 sudo apt-get install apt-transport-https
 sudo apt-get update
-sudo apt-get install aspnetcore-runtime-2.2
+sudo apt-get install aspnetcore-runtime-3.1
 EOS
                                                                 chmod +x dotnet.sh
                                                                 printf "\nSending script to ARM device.\n\n"
@@ -1275,7 +1275,7 @@ EOS
 printf "\nInstalling .NET Runtime now...\n\n"
 sudo rpm -Uvh https://packages.microsoft.com/config/rhel/7/packages-microsoft-prod.rpm
 sudo yum -y update
-sudo yum -y install aspnetcore-runtime-2.2
+sudo yum -y install aspnetcore-runtime-3.1
 EOS
                                                                 chmod +x dotnet.sh
                                                                 printf "\nSending script to ARM device.\n\n"
@@ -1320,9 +1320,9 @@ EOS
                                     dotnet restore
                                     dotnet publish --configuration Release
                                     if [ ! -d "/home/$USER/x42node" ]; then
-                                        mv x42.x42D/bin/Release/netcoreapp2.1/publish ~/x42node
+                                        mv x42.x42D/bin/Release/netcoreapp3.1/publish ~/x42node
                                     else
-                                        mv -f x42.x42D/bin/Release/netcoreapp2.1/publish ~/x42node
+                                        mv -f x42.x42D/bin/Release/netcoreapp3.1/publish ~/x42node
                                     fi
                                     printf "\n~/x42node now available to transfer to ARM device.\n\nReturning to prior menu in 2.5s...\n\n"
                                     sleep 2.5
@@ -1337,9 +1337,9 @@ EOS
                                     dotnet restore
                                     dotnet publish --configuration Release
                                     if [ ! -d "/home/$USER/x42node" ]; then
-                                        mv x42.x42D/bin/Release/netcoreapp2.1/publish ~/x42node
+                                        mv x42.x42D/bin/Release/netcoreapp3.1/publish ~/x42node
                                     else
-                                        mv -f x42.x42D/bin/Release/netcoreapp2.1/publish ~/x42node
+                                        mv -f x42.x42D/bin/Release/netcoreapp3.1/publish ~/x42node
                                     fi
                                     printf "\n~/x42node now available to transfer to ARM device.\n\nReturning to prior menu in 2.5s...\n\n"
                                     sleep 2.5
@@ -1478,9 +1478,9 @@ EOS
                                     dotnet publish --configuration Release
                                     if [ ! -d "/home/$USER/x42node" ]; then
                                         ((notAvail+=22))
-                                        mv x42.x42D/bin/Release/netcoreapp2.1/publish ~/x42node
+                                        mv x42.x42D/bin/Release/netcoreapp3.1/publish ~/x42node
                                     else
-                                        mv -f x42.x42D/bin/Release/netcoreapp2.1/publish ~/x42node
+                                        mv -f x42.x42D/bin/Release/netcoreapp3.1/publish ~/x42node
                                     fi
                                     printf "\nStopping service and removing x42node folder from ARM device.\n\n"
                                     ssh $username@$ipAddr 'sudo systemctl stop x42node.service; rm -rf ~/x42node'
@@ -1521,9 +1521,9 @@ EOS
                                     dotnet publish --configuration Release
                                     if [ ! -d "/home/$USER/x42node" ]; then
                                         ((notAvail+=42))
-                                        mv x42.x42D/bin/Release/netcoreapp2.1/publish ~/x42node
+                                        mv x42.x42D/bin/Release/netcoreapp3.1/publish ~/x42node
                                     else
-                                        mv -f x42.x42D/bin/Release/netcoreapp2.1/publish ~/x42node
+                                        mv -f x42.x42D/bin/Release/netcoreapp3.1/publish ~/x42node
                                     fi
                                     printf"\nStopping service and removing x42node folder from ARM device.\n\n"
                                     ssh $username@$ipAddr 'sudo systemctl stop x42node.service; rm -rf ~/x42node'
@@ -1562,9 +1562,9 @@ EOS
                                     dotnet restore
                                     dotnet publish --configuration Release
                                     if [ ! -d "/home/$USER/x42node" ]; then
-                                        mv x42.x42D/bin/Release/netcoreapp2.1/publish ~/x42node
+                                        mv x42.x42D/bin/Release/netcoreapp3.1/publish ~/x42node
                                     else
-                                        mv -f x42.x42D/bin/Release/netcoreapp2.1/publish ~/x42node
+                                        mv -f x42.x42D/bin/Release/netcoreapp3.1/publish ~/x42node
                                     fi
                                     if [ "$notAvail" == "42" ]; then
                                         rm -rf ~/X42-FullNode
@@ -1578,9 +1578,9 @@ EOS
                                     dotnet restore
                                     dotnet publish --configuration Release
                                     if [ ! -d "/home/$USER/x42node" ]; then
-                                        mv x42.x42D/bin/Release/netcoreapp2.1/publish ~/x42node
+                                        mv x42.x42D/bin/Release/netcoreapp3.1/publish ~/x42node
                                     else
-                                        mv -f x42.x42D/bin/Release/netcoreapp2.1/publish ~/x42node
+                                        mv -f x42.x42D/bin/Release/netcoreapp3.1/publish ~/x42node
                                     fi
                                 fi
                                 printf "Finished updating ~/x42node\n\nReturning to Main Menu in 5s...\n"

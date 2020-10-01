@@ -38,9 +38,9 @@ if [ ! -d "/home/$USER/X42-FullNode" ]; then
     dotnet publish --configuration Release
     if [ ! -d "/home/$USER/x42node" ]; then
         ((notAvail+=22))
-        mv x42.x42D/bin/Release/netcoreapp2.1/publish ~/x42node
+        mv x42.x42D/bin/Release/netcoreapp3.1/publish ~/x42node
     else
-        mv -f x42.x42D/bin/Release/netcoreapp2.1/publish ~/x42node
+        mv -f x42.x42D/bin/Release/netcoreapp3.1/publish ~/x42node
     fi
     printf "\nPlease provide the following information for your ARM device.\n\n"
     read -p "Username: " username
@@ -76,9 +76,9 @@ else
     dotnet publish --configuration Release
     if [ ! -d "/home/$USER/x42node" ]; then
         ((notAvail+=42))
-        mv x42.x42D/bin/Release/netcoreapp2.1/publish ~/x42node
+        mv x42.x42D/bin/Release/netcoreapp3.1/publish ~/x42node
     else
-        mv -f x42.x42D/bin/Release/netcoreapp2.1/publish ~/x42node
+        mv -f x42.x42D/bin/Release/netcoreapp3.1/publish ~/x42node
     fi
     printf "\nPlease provide the following information for your ARM device.\n\n"
     read -p "Username: " username
